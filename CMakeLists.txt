@@ -42,7 +42,7 @@ set(sources_SRCS
     ${PROJ_PATH}/Core/Src/stm32l4xx_it.c
     ${PROJ_PATH}/Core/Src/stm32l4xx_hal_msp.c
     ${PROJ_PATH}/Core/Src/system_stm32l4xx.c
-    ${PROJ_PATH}/Core/Startup/startup_stm32l432kcux.S
+    ${PROJ_PATH}/Core/Startup/startup_stm32l432kcux.s
     ${PROJ_PATH}/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
     ${PROJ_PATH}/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c
     ${PROJ_PATH}/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c
