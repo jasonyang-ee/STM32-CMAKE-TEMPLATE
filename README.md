@@ -218,22 +218,22 @@ Be sure to edit template for the following:
 > -mcpu=cortex-m7
 > -mfpu=fpv5-d16
 > -mfloat-abi=hard
-![ARM Type](ARM_type.png)
-![ARM Type2](ARM_type2.png)
+![ARM Type](README_image/ARM_type.png)
+![ARM Type2](README_image/ARM_type2.png)
 
 - Match this to your linker file name
 > set(linker_script_SRC   ${PROJ_PATH}/path-to-linker-script.ld)
-![linker](linker.png)
+![linker](README_image/linker.png)
 
 - Include all source file (.cpp .c)
 > set(sources_SRCS
-![source](source.png)
+![source](README_image/source.png)
 
 - Include all your header file path (.h)
 > set(include_path_DIRS
-![header](header.png)
+![header](README_image/header.png)
 
 - Define ARM and HAL variable
 > set(symbols_SYMB
-![Define](Define.png)
+![Define](README_image/Define.png)
 
