@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cortex Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "stlink",
+            "device": "STM32L432KC",            //MCU used
+            "interface": "swd",                 //Interface setup
+            "serialNumber": "",                 //Set ST-Link ID if you use multiple at the same time
+            "runToEntryPoint": "main",          //Run to main and stop there
+            "svdFile": "${workspaceFolder}/STM32L4_svd/STM32L4_svd_V1.3/STM32L4x2.svd",         //SVD file to see reisters
+            "v1": false,
+            "showDevDebugOutput": "both",
+        }
+    ]
+}
