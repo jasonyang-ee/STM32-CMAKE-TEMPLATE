@@ -292,6 +292,64 @@ Create file `CMakePresets.json` in Project Root
 
 ## Configure VS Code to be Ready for CMake
 
-`Ctrl + Shift + P` to open command and enter `CMake: Quick Start`
-[cmake quick start](README_image/quickstart.png)
+`Ctrl + Shift + P` to open command and run `CMake: Quick Start`
 
+![cmake quick start](README_image/quickstart.png)
+
+## Build Project
+
+At bottom left. Select configuration, for example `[DEBUG]`.
+
+Then select `Build` to compile.
+
+![build](README_image/build.png)
+
+## Debug project with cortex-debug
+Open debug tab.
+
+![debug](README_image/debug.png)
+
+First time opening this will promte option to create `.vscode/launch.json`
+
+Template:
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Microcontroller - STLink-V3",
+            "cwd": "${workspaceFolder}",                        //Path from where commands are executed
+            "type": "cortex-debug",                             //Debug 
+            "executable": "${command:cmake.launchTargetPath}",  //or fixed file path: build/project-name.elf
+            "request": "launch",                                //Use "attach" to connect to target w/o elf download
+            "servertype": "stlink",                             //Use stlink setup of cortex-M debug
+            "device": "STM32L432KC",                            //MCU used
+            "interface": "swd",                                 //Interface setup
+            "serialNumber": "",                                 //Set ST-Link ID if you use multiple at the same time
+            "runToEntryPoint": "main",                          //Run to main and stop there
+            "svdFile": "STM32L432KC.svd",                         //SVD file to see reisters
+            "v1": false,
+            "showDevDebugOutput": "both",
+
+            // Will get automatically detected if STM32CubeIDE is installed to default directory or it can be manually provided if necessary..
+            // "serverpath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221\\tools\\bin\\ST-LINK_gdbserver.exe",
+            // "armToolchainPath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_2.0.0.202105311346\\tools\\bin",
+            // "stm32cubeprogrammer": "c:\\Program Files\\STMicroelectronics\\STM32Cube\\STM32CubeProgrammer\\bin",
+
+            // If you use external loader, add additional arguments
+            // "serverArgs": ["--extload", "path/to/ext/loader.stldr"],
+        }
+    ]
+}
+```
+
+## Monitor Register Using SVG (System View Description) File
+
+Download SVG file from [ST website/STM32XXXX/CAD Resources](https://www.st.com/en/microcontrollers-microprocessors/stm32l432kc.html#cad-resources)
+
+Place SVG file within project root and specifiy path in `launch.json`.
+
+![svg](README_image/svg.png)
+
+## Debug Live
