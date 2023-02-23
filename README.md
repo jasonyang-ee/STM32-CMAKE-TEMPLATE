@@ -27,8 +27,16 @@ ninja --version
 ## **VS Code Extensions**
 
 Install those extensions to allow better programming environment.
+```
+Arm Assembly
+C/C++
+CMake
+CMake Tools
+Cortex-Debug
+LinkerScript
+```
 
-- Ctrl + Shift + ` to open terminal, then enter (Shift + Ins) those command.
+Optionally: `` Ctrl + Shift + ` `` to open terminal, then enter (Shift + Ins) those command.
 ```shell
 code --install-extension ms-vscode.cpptools
 code --install-extension ms-vscode.cmake-tools
@@ -229,6 +237,62 @@ Be sure to edit template for the following:
 `set(sources_SRCS`  
 ![source](README_image/source.png)
 
+### The best way is to run an auto scan bash script for all the source file to avoid missing anything.
+
+In terminal `` Ctrl + ` ``, run `.\getIncludeList.sh` and `.\getSourceList.sh`
+
+This will generate the scanned source and header file and save in cmake folder.
+
+Template:
+
+```bash
+# Run .\getSourceList.sh in terminal to generate an updated list of source for CMake
+
+CORE_PATH='Core/*'
+DRIVERS_PATH='Drivers/*'
+FATFS_PATH='FATFS/*'
+MIDWARE_PATH='Middlewares/*'
+USB_PATH='USB_Device/*'
+
+CORE_SRC="$(eval find "$CORE_PATH" -type f -name '*.c' -o -name '*.cpp' -o -name '*.s')"
+DRIVERS_SRC="$(eval find "$DRIVERS_PATH" -type f -name '*.c')"
+FATFS_SRC="$(eval find "$FATFS_PATH" -type f -name '*.c')"
+MIDWARE_SRC="$(eval find "$MIDWARE_PATH" -type f -name '*.c')"
+USB_SRC="$(eval find "$USB_PATH" -type f -name '*.c')"
+
+# Print find result
+printf "$CORE_SRC\n$DRIVERS_SRC\n$FATFS_SRC\n$USB_SRC\n$MIDWARE_SRC" > cmake/SourceList.txt
+
+# Has bug
+#ALL_SRC="$(eval find * ! -wholename 'build/*' -type f -name '*.c' -o -name '*.cpp' -o -name '*.s')"
+#printf "$ALL_SRC" > test.txt
+
+# Adding ${PROJ_PATH}/ to beginning of each line
+sed -i 's/^/${PROJ_PATH}\//' cmake/SourceList.txt
+```
+
+```bash
+# Run .\getIncludeList.sh in terminal to generate an updated list of source for CMake
+
+CORE_PATH='Core/*'
+DRIVERS_PATH='Drivers/*'
+FATFS_PATH='FATFS/*'
+MIDWARE_PATH='Middlewares/*'
+USB_PATH='USB_Device/*'
+
+CORE_INC="$(eval find "$CORE_PATH" -type d -name 'Inc' -o -name 'Include')"
+DRIVERS_INC="$(eval find "$DRIVERS_PATH" -type d -name 'Inc' -o -name 'Include' -o -name 'Legacy')"
+FATFS_INC="$(eval find "$FATFS_PATH" -type d)"
+MIDWARE_INC="$(eval find "$MIDWARE_PATH" -type d -name 'Inc' -o -name 'src')"
+USB_INC="$(eval find "$USB_PATH" -type d)"
+
+# Print find result
+printf "$CORE_INC\n$DRIVERS_INC\n$FATFS_INC\n$MIDWARE_INC\n$USB_INC" > cmake/IncludeList.txt
+
+# Adding ${PROJ_PATH}/ to beginning of each line
+sed -i 's/^/${PROJ_PATH}\//' cmake/IncludeList.txt
+```
+
 1. Include all your header file path (.h)
 `set(include_path_DIRS`  
 ![header](README_image/header.png)
@@ -292,9 +356,7 @@ Create file `CMakePresets.json` in Project Root
 
 ## Configure VS Code to be Ready for CMake
 
-`Ctrl + Shift + P` to open command and run `CMake: Quick Start`
-
-![cmake quick start](README_image/quickstart.png)
+Restart VS Code window to have CMake reading the `CMakePresets.json` file. This will auto apply correct build tool chain for build compile.
 
 ## Build Project
 
@@ -305,11 +367,10 @@ Then select `Build` to compile.
 ![build](README_image/build.png)
 
 ## Debug project with cortex-debug
-Open debug tab.
 
-![debug](README_image/debug.png)
+Create `.vscode/launch.json`
 
-First time opening this will promte option to create `.vscode/launch.json`
+> Device name may be comment out. It is just a reference.
 
 Template:
 
@@ -343,6 +404,10 @@ Template:
     ]
 }
 ```
+Open debug tab. And `cortex-debug` should be available to run (F5).
+
+![debug](README_image/debug.png)
+
 
 ## Monitor Register Using SVG (System View Description) File
 
@@ -352,4 +417,68 @@ Place SVG file within project root and specifiy path in `launch.json`.
 
 ![svg](README_image/svg.png)
 
-## Debug Live
+## IntelliSense Setting
+
+Configuring the auto complete and syntax detaction
+
+Create file `.vscode/c_cpp_preperties.json`
+
+Template:
+
+```json
+{
+    "version": 4,
+    "configurations": [
+        {
+            "name": "STM32",
+            "intelliSenseMode": "${default}",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ]
+}
+```
+
+## Flash to Target
+
+Configuring the VS Code Run Task `Ctrl + Shift + P > run task + Enter` feature. This will allow auto excution of running custom terminal commands.
+
+Create file `.vscode/tasks.json`
+
+> Setting Run Task shortcut (Ctrl + T) for VS Code is useful to excute the Flash .elf file command.
+
+Template:
+
+```json
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "CubeProg: Flash project (SWD)",
+			"command": "STM32_Programmer_CLI",
+			"args": [
+				"--connect",
+				"port=swd",
+				"--download",
+				"${command:cmake.launchTargetPath}",
+				"-rst",
+				"-run"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": []
+		}
+	]
+}
+```
+
+## .gitignore
+
+Don't forget to set ignoring build files to avoid bloated git repo.
+
+```
+dir_to_ignore/ 
+Debug/
+build/
+```
