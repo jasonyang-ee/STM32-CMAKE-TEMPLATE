@@ -1,3 +1,4 @@
 dir_to_ignore/ 
 Debug/
 build/
+L432KC Debug.launch
