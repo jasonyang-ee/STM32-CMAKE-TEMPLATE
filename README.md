@@ -1,5 +1,7 @@
 # Setting Up VS Code to Build STM32 Using CMake
 
+Project Using STM32L432KC as Example
+
 ## **Toolchain**
 
 Download and place those in a centralized folder. Edit environment PATH for those folder or it's bin folder.
