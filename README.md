@@ -477,8 +477,19 @@ Template:
 
 Don't forget to set ignoring build files to avoid bloated git repo.
 
+gitignore rule:
 ```
-dir_to_ignore/ 
-Debug/
 build/
+```
+
+Optionally, you may still keep STM32CubeMX Project for Pin Management and Code Generation
+
+Best practice is to track only .ioc file in CubeMX folder.
+
+The rest of code generation should be treated as `build` files that does not get tracked.
+
+gitignore rule:
+```
+CubeMX/*
+!CubeMX/*.ioc
 ```
