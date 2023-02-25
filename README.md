@@ -1,6 +1,6 @@
 # Setting Up VS Code to Build STM32 Using CMake
 
-Project Using STM32L432KC as Example
+Project Using STM32L432KC as Example. Test hardware is NUCLEO-L432KC.
 
 ## **Toolchain**
 
@@ -229,6 +229,30 @@ Be sure to edit template for the following:
 `
 ![ARM Type](README_image/ARM_type.png)
 ![ARM Type2](README_image/ARM_type2.png)
+
+General rule for settings would be as per table below
+
+|STM32 Family | -mcpu           | -mfpu         | -mfloat-abi |
+|-------------|-----------------|---------------|-------------|
+| STM32F0     | `cortex-m0`     | `Not used`    | `soft`      |
+| STM32F1     | `cortex-m3`     | `Not used`    | `soft`      |
+| STM32F2     | `cortex-m3`     | `Not used`    | `soft`      |
+| STM32F3     | `cortex-m4`     | `fpv4-sp-d16` | `hard`      |
+| STM32F4     | `cortex-m4`     | `fpv4-sp-d16` | `hard`      |
+| STM32F7 SP  | `cortex-m7`     | `fpv5-sp-d16` | `hard`      |
+| STM32F7 DP  | `cortex-m7`     | `fpv5-d16`    | `hard`      |
+| STM32G0     | `cortex-m0plus` | `Not used`    | `soft`      |
+| STM32C0     | `cortex-m0plus` | `Not used`    | `soft`      |
+| STM32G4     | `cortex-m4`     | `fpv4-sp-d16` | `hard`      |
+| STM32H7     | `cortex-m7`     | `fpv5-d16`    | `hard`      |
+| STM32L0     | `cortex-m0plus` | `Not used`    | `soft`      |
+| STM32L1     | `cortex-m3`     | `Not used`    | `soft`      |
+| STM32L4     | `cortex-m4`     | `fpv4-sp-d16` | `hard`      |
+| STM32L5     | `cortex-m33`    | `fpv5-sp-d16` | `hard`      |
+| STM32U5     | `cortex-m33`    | `fpv5-sp-d16` | `hard`      |
+| STM32WB     | `cortex-m4`     | `fpv4-sp-d16` | `hard`      |
+| STM32WL CM4 | `cortex-m4`     | `Not used`    | `soft`      |
+| STM32WL CM0 | `cortex-m0plus` | `Not used`    | `soft`      |
 
 1. Match this to your linker file name
 `set(linker_script_SRC   ${PROJ_PATH}/path-to-linker-script.ld)`  
@@ -505,7 +529,10 @@ Some BIOS need to enable virtualization
 
 
 
+
+
 ## Docker
+
 
 ### Installation
 Install Docker Desktop: https://www.docker.com/products/docker-desktop/
@@ -513,11 +540,33 @@ Install Docker Desktop: https://www.docker.com/products/docker-desktop/
 Enable Setting: "Use the WSL 2 based engine" and "Resources/WSL Integration/integration with my default WSL distro"
 
 
-### Image and Build
 
-PUT BUILD IMAGE LINK HERE
+### Build Your Own
 
-AND PUT DOCKERFILE HERE
+Dockerfile can be found in here:
+
+https://github.com/jasonyang-ee/STM32-Dockerfile.git
+
+
+
+### Image Ready To Use
+
+Ubuntu:
+```
+docker pull jasonyangee/stm32_ubuntu
+```
+
+Alpine:
+```
+docker pull jasonyang/stm32_alpine
+```
+
+
+### Run Container
+```
+docker run -it stm32_ubuntu:latest
+docker run -it stm32_alpine:latest
+```
 
 
 
@@ -570,4 +619,4 @@ $ sudo apt autoremove
 $ docker run -it --privileged IMAGE:VERSION
 $ st-info --probe
 ```
-![](README_image/stlinked.png)
+![stlinked](README_image/stlinked.png)
