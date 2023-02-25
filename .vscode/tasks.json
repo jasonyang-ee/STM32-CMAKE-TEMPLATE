@@ -61,7 +61,8 @@
 			"args": [
 				"write",
 				"${command:cmake.launchTargetDirectory}/${command:cmake.buildTargetName}.bin",
-				"0x8000000"
+				"0x8000000",
+				"--reset"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
