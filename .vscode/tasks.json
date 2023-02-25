@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
-			"label": "Build project",
+			"label": "Build Project",
 			"command": "cmake",
 			"args": [
 				"--build",
@@ -24,26 +24,7 @@
 		},
 		{
 			"type": "shell",
-			"label": "Re-build project",
-			"command": "cmake",
-			"args": [
-				"--build",
-				"${command:cmake.buildDirectory}",
-				"--clean-first",
-				"-v",
-				"-j",
-				"20"
-			],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"problemMatcher": [
-				"$gcc"
-			]
-		},
-		{
-			"type": "shell",
-			"label": "Clean project",
+			"label": "Clean Project",
 			"command": "cmake",
 			"args": [
 				"--build",
@@ -58,7 +39,7 @@
 		},
 		{
 			"type": "shell",
-			"label": "CubeProg: Flash project (SWD)",
+			"label": "Windows: Flash Firmware",
 			"command": "STM32_Programmer_CLI",
 			"args": [
 				"--connect",
@@ -72,6 +53,35 @@
 				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "Linux: Flash Firmware",
+			"command": "st-flash",
+			"args": [
+				"write",
+				"${command:cmake.launchTargetDirectory}/${command:cmake.buildTargetName}.bin",
+				"0x8000000"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "Linux: Reset Device",
+			"command": "st-flash",
+			"args": [
+				"reset"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": []
 		}
+
+
+		
 	]
 }
