@@ -495,3 +495,79 @@ gitignore rule:
 CubeMX/*
 !CubeMX/*.ioc
 ```
+
+
+
+## WSL
+Follow this: https://learn.microsoft.com/en-us/windows/wsl/setup/environment?source=recommendations
+
+Some BIOS need to enable virtualization
+
+
+
+## Docker
+
+### Installation
+Install Docker Desktop: https://www.docker.com/products/docker-desktop/
+
+Enable Setting: "Use the WSL 2 based engine" and "Resources/WSL Integration/integration with my default WSL distro"
+
+
+### Image and Build
+
+PUT BUILD IMAGE LINK HERE
+
+AND PUT DOCKERFILE HERE
+
+
+
+### Prepare USB passthrough to WSL Docker container
+Follow this:
+https://learn.microsoft.com/en-us/windows/wsl/connect-usb
+
+- Run cmd (admin mode) on Windows:
+
+```cmd
+> winget install --interactive --exact dorssel.usbipd-win
+> wsl --update
+> wsl --shutdown
+```
+
+- Run (restart) WSL Ubuntu:
+
+```shell
+$ sudo apt install linux-tools-5.4.0-77-generic hwdata
+$ sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-tools/5.4.0-77-generic/usbip 20
+```
+```shell
+// Optionally
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt autoremove
+```
+
+- Run cmd (admin mode) on Windows:
+
+```cmd
+> usbipd list
+// Note the ST-Link ID and bind it
+
+> usbipd bind --busid 3-5
+> usbipd attach --busid 3-5
+> usbipd wsl list
+```
+
+![](README_image/bind.png)
+
+![](README_image/attached.png)
+
+
+
+### Run Docker container
+
+- Run WSL Ubuntu:
+```shell
+$ docker run -it --privileged IMAGE:VERSION
+$ st-info --probe
+```
+![](README_image/stlinked.png)
