@@ -564,8 +564,8 @@ docker pull jasonyang/stm32_alpine
 
 ### Run Container
 ```
-docker run -it stm32_ubuntu:latest
-docker run -it stm32_alpine:latest
+docker run -it --privileged jasonyangee/stm32_ubuntu:latest
+docker run -it --privileged jasonyangee/stm32_alpine:latest
 ```
 
 
@@ -619,7 +619,9 @@ usbipd wsl list
 
 - Run WSL Ubuntu:
 ```shell
-docker run -it --privileged IMAGE:VERSION
+docker run -it --privileged jasonyangee/stm32_alpine:latest
 st-info --probe
 ```
+Note: `--privileged` is necessary to allow device port passthrough
+
 ![stlinked](README_image/stlinked.png)
