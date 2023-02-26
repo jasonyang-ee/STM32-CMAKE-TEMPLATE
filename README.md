@@ -577,36 +577,39 @@ https://learn.microsoft.com/en-us/windows/wsl/connect-usb
 - Run cmd (admin mode) on Windows:
 
 ```cmd
-> winget install --interactive --exact dorssel.usbipd-win
-> wsl --update
-> wsl --shutdown
+winget install --interactive --exact dorssel.usbipd-win
+wsl --update
+wsl --shutdown
 ```
 
 - Run (restart) WSL Ubuntu:
 
 ```shell
-$ sudo apt install linux-tools-5.4.0-77-generic hwdata
-$ sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-tools/5.4.0-77-generic/usbip 20
+sudo apt install linux-tools-5.4.0-77-generic hwdata
+sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-tools/5.4.0-77-generic/usbip 20
 ```
+
+Optionally
 ```shell
-// Optionally
-$ sudo apt update
-$ sudo apt upgrade
-$ sudo apt autoremove
+sudo apt update
+sudo apt upgrade
+sudo apt autoremove
 ```
 
 - Run cmd (admin mode) on Windows:
 
 ```cmd
-> usbipd list
-// Note the ST-Link ID and bind it
-
-> usbipd bind --busid 3-5
-> usbipd attach --busid 3-5
-> usbipd wsl list
+usbipd list
 ```
 
 ![](README_image/bind.png)
+
+Note the ST-Link ID and bind it
+```cmd
+usbipd bind --busid 3-5
+usbipd attach --busid 3-5
+usbipd wsl list
+```
 
 ![](README_image/attached.png)
 
@@ -616,7 +619,7 @@ $ sudo apt autoremove
 
 - Run WSL Ubuntu:
 ```shell
-$ docker run -it --privileged IMAGE:VERSION
-$ st-info --probe
+docker run -it --privileged IMAGE:VERSION
+st-info --probe
 ```
 ![stlinked](README_image/stlinked.png)
