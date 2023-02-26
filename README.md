@@ -553,12 +553,12 @@ https://github.com/jasonyang-ee/STM32-Dockerfile.git
 
 Ubuntu:
 ```
-docker pull jasonyangee/stm32_ubuntu
+docker pull jasonyangee/stm32_ubuntu:latest
 ```
 
 Alpine:
 ```
-docker pull jasonyang/stm32_alpine
+docker pull jasonyangee/stm32_alpine:latest
 ```
 
 
