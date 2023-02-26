@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  download_image:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout project
+      uses: actions/checkout@v2
+
+    - name: Download image
+      uses: ishworkh/docker-image-artifact-download@v1
+      with:
+        image: "stm32_alpine:latest"
+  
+  run_image:
+    runs-on: ubuntu-latest
+    container:
+      image: stm32_alpine:latest
+      options: --entrypoint bin/bash
+      volumes:
+      - /.:/home/
+    steps:
+    - name: init
+      run: cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE:PATH="/home/cmake/gcc-arm-none-eabi.cmake" "-B /home/build/Debug/" -G Ninja
+    
+    - name: build
+      run: cmake --build /home/build/Debug/ -j 10
