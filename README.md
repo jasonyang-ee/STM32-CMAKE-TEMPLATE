@@ -1,3 +1,5 @@
+![Build Result](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build.yml/badge.svg)
+
 # Setting Up VS Code to Build STM32 Using CMake
 
 Project Using STM32L432KC as Example. Test hardware is NUCLEO-L432KC.
