@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Run .\getIncludeList.sh in terminal to generate an updated list of source for CMake
 
 CORE_PATH='Core/*'
