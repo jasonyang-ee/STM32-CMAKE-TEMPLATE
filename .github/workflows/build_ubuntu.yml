@@ -10,7 +10,7 @@ jobs:
   BUILD_RELEASE:
     runs-on: ubuntu-latest
     container:
-      image: 'jasonyangee/stm32_ubuntu:latest'
+      image: 'jasonyangee/stm32_alpine:latest'
     steps:
     - uses: actions/checkout@v3
     - name: BUILD
@@ -20,10 +20,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: L432KC-TEMPLATE.elf
-        path: $GITHUB_WORKSPACE/build/L432KC.elf
+        path: ${GITHUB_WORKSPACE}/build/L432KC.elf
 
     - name: Upload Binary .bin
       uses: actions/upload-artifact@v2
       with:
         name: L432KC-TEMPLATE.bin
-        path: $GITHUB_WORKSPACE/build/L432KC.bin
+        path: ${GITHUB_WORKSPACE}/build/L432KC.bin
