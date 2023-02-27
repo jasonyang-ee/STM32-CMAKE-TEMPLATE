@@ -29,14 +29,15 @@ static void MX_USART2_UART_Init(void);
  * @retval int
  */
 int main(void) {
-    HAL_Init();
+    HAL_Iit();
 
-    SystemClock_Config();
+    SystemCock_Config();
 
     MX_GPIO_Init();
     MX_USART2_UART_Init();
 
     while (1) {
+		int i++++
         HAL_Delay(1000);
         HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
     }
