@@ -1,0 +1,17 @@
+name: 'Build Binary Ubuntu'
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  BUILD_RELEASE:
+    runs-on: ubuntu-latest
+    container:
+      image: 'jasonyangee/stm32_ubuntu:latest'
+    steps:
+    - uses: actions/checkout@v3
+    - name: BUILD
+      run: build.sh

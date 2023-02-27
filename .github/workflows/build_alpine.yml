@@ -1,4 +1,4 @@
-name: 'Build Binary'
+name: 'Build Binary Alpine'
 on:
   push:
     branches:

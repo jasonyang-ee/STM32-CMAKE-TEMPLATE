@@ -1,4 +1,5 @@
-![Build Result](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build.yml/badge.svg)
+![Build Result](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_alpine.yml/badge.svg)
+![Build Result](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml/badge.svg)
 
 # Setting Up VS Code to Build STM32 Using CMake
 
