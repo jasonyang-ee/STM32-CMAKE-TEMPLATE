@@ -1,5 +1,5 @@
-![Build Result](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_alpine.yml/badge.svg)
-![Build Result](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml/badge.svg)
+[![Build Binary Alpine](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_alpine.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_alpine.yml)
+[![Build Binary Ubuntu](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml)
 
 # Setting Up VS Code to Build STM32 Using CMake
 
@@ -554,15 +554,16 @@ https://github.com/jasonyang-ee/STM32-Dockerfile.git
 
 ### Image Ready To Use
 
-Ubuntu:
+- Ubuntu:
 ```
 docker pull jasonyangee/stm32_ubuntu:latest
 ```
 
-Alpine:
+- Alpine:
 ```
 docker pull jasonyangee/stm32_alpine:latest
 ```
+
 
 
 ### Run Container
@@ -592,7 +593,7 @@ sudo apt install linux-tools-5.4.0-77-generic hwdata
 sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-tools/5.4.0-77-generic/usbip 20
 ```
 
-Optionally
+- Optionally
 ```shell
 sudo apt update
 sudo apt upgrade
