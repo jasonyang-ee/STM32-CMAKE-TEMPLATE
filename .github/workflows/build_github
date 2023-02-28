@@ -1,0 +1,41 @@
+name: 'Build Binary Ubuntu'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  BUILD_RELEASE:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Dependencies
+      run: |
+        sudo apt install -y \
+          	build-essential \
+            gcc-arm-none-eabi \
+            binutils-arm-none-eabi \
+            cmake ninja-build \
+            git \
+            stlink-tools \
+            xz-utils curl
+
+    - name: Checkout Files
+    - uses: actions/checkout@v3
+
+    - name: Build Init
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE:PATH="$GITHUB_WORKSPACE/cmake/gcc-arm-none-eabi.cmake" "-B $GITHUB_WORKSPACE/build" -G Ninja
+
+    - name: Build
+      run: cmake --build $GITHUB_WORKSPACE/build -j 10
+
+    - name: Upload Binary .elf
+      uses: actions/upload-artifact@v2
+      with:
+        name: BINARY.elf
+        path: ${{ github.workspace }}/build/*.elf
+
+    - name: Upload Binary .bin
+      uses: actions/upload-artifact@v2
+      with:
+        name: BINARY.bin
+        path: ${{ github.workspace }}/build/*.bin

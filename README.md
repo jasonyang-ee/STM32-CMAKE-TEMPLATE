@@ -1,5 +1,6 @@
 [![Build Binary Alpine](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_alpine.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_alpine.yml)
 [![Build Binary Ubuntu](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml)
+[![Build Binary Ubuntu](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_github.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_github.yml)
 
 # Setting Up VS Code to Build STM32 Using CMake
 
