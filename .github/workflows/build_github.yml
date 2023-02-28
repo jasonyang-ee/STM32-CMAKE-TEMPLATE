@@ -1,4 +1,4 @@
-name: 'Build Binary Ubuntu'
+name: 'Build Binary Github'
 on:
   push:
     branches:
@@ -20,7 +20,7 @@ jobs:
             xz-utils curl
 
     - name: Checkout Files
-    - uses: actions/checkout@v3
+      uses: actions/checkout@v3
 
     - name: Build Init
       run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE:PATH="$GITHUB_WORKSPACE/cmake/gcc-arm-none-eabi.cmake" "-B $GITHUB_WORKSPACE/build" -G Ninja
