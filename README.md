@@ -2,23 +2,29 @@
 [![Build Binary Ubuntu](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml)
 [![Build Binary Ubuntu](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_github.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_github.yml)
 
-# Setting Up VS Code to Build STM32 Using CMake
+
+
+# 1. Setting Up VS Code to Build STM32 Using CMake
 
 Project Using STM32L432KC as Example. Test hardware is NUCLEO-L432KC.
 
-## **Toolchain**
 
-Download and place those in a centralized folder. Edit environment PATH for those folder or it's bin folder.
+
+
+
+## 1.1. Toolchain
+
+For Windows, download and place those in a centralized folder. Edit environment PATH for those folder or it's bin folder.
 
 - [ARM GNU for compile](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
 
-- [CMake for easy execution of compile](https://cmake.org/download/)
+- [CMake](https://cmake.org/download/)
 
 - [Ninja](https://github.com/ninja-build/ninja/releases)
 
-- ST Link from Installing STM32CubeIDE `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221`
+- ST Link GDB Server (CubeIDE) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221`
 
-- STM32_Programmer_CLI `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.0.100.202110141430`
+- STM32_Programmer_CLI (CubeIDE) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.0.100.202110141430`
 
 
 Run CMD to check toolchain installation.
@@ -30,7 +36,10 @@ cmake --version
 ninja --version
 ```
 
-## **VS Code Extensions**
+
+
+
+## 1.2. VS Code Extensions
 
 Install those extensions to allow better programming environment.
 ```
@@ -50,12 +59,17 @@ code --install-extension twxs.cmake
 code --install-extension marus25.cortex-debug
 code --install-extension dan-c-underwood.arm
 code --install-extension zixuanwang.linkerscript
-
 ```
 
-## **CMake Configuration**
 
-### About CMakeLists.txt file
+
+
+## 1.3. CMake Configuration
+
+
+
+
+### 1.3.1. About CMakeLists.txt file
 
 Every CMake-based application requires `CMakeLists.txt` file *in the root directory*, that describes the project and provides input information for build system generation.
 > Root `CMakeLists.txt` file is sometimes called *top-level CMake* file
@@ -70,7 +84,11 @@ Essential things described in `CMakeLists.txt` file:
 - Compilation defines, or sometimes called *preprocessor defines* (`-D`)
 - Cortex-Mxx and floating point settings for instruction set generation
 
-## Prepare .cmak file
+
+
+
+
+## 1.4. Prepare .cmak file
 
 CMake needs to be aware about Toolchain we would like to use to finally compile the project with. This file will be universal across projects.
 
@@ -105,12 +123,16 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 
 
-## Prepare CMakeLists.txt file
+
+## 1.5. Prepare CMakeLists.txt file
 
 We need to create main `CMakeLists.txt`, also called *root* CMake file.
 > Make sure you really name it `CMakeLists.txt` with correct upper and lowercase characters.
 
-Template File as below.
+
+
+
+### 1.5.1. Template File as below.
 ```cmake
 cmake_minimum_required(VERSION 3.22)
 
@@ -221,7 +243,9 @@ add_custom_command(TARGET ${EXECUTABLE} POST_BUILD
 )
 ```
 
-Be sure to edit template for the following:
+
+
+### 1.5.2. Be sure to edit template for the following:
 
 1. Name your project.
 `project(your-project-name)`
@@ -234,7 +258,10 @@ Be sure to edit template for the following:
 ![ARM Type](README_image/ARM_type.png)
 ![ARM Type2](README_image/ARM_type2.png)
 
-General rule for settings would be as per table below
+
+
+
+### 1.5.3. General rule for settings would be as per table below
 
 |STM32 Family | -mcpu           | -mfpu         | -mfloat-abi |
 |-------------|-----------------|---------------|-------------|
@@ -262,12 +289,13 @@ General rule for settings would be as per table below
 `set(linker_script_SRC   ${PROJ_PATH}/path-to-linker-script.ld)`  
 ![linker](README_image/linker.png)
 
-
 1. Include all source file (.cpp .c)
 `set(sources_SRCS`  
 ![source](README_image/source.png)
 
-### The best way is to run an auto scan bash script for all the source file to avoid missing anything.
+
+
+### 1.5.4. The best way is to run an auto scan bash script for all the source file to avoid missing anything.
 
 In terminal `` Ctrl + ` ``, run `.\getIncludeList.sh` and `.\getSourceList.sh`
 
@@ -332,7 +360,9 @@ sed -i 's/^/${PROJ_PATH}\//' cmake/IncludeList.txt
 ![Define](README_image/Define.png)
 
 
-## Prepare CMakePresets.json file
+
+
+## 1.6. Prepare CMakePresets.json file
 
 `CMakePresets.json` provides definition for user configuration. Having this file allows developer to quickly change between debug and release mode.
 
@@ -384,11 +414,15 @@ Create file `CMakePresets.json` in Project Root
 }
 ```
 
-## Configure VS Code to be Ready for CMake
+
+
+## 1.7. Configure VS Code to be Ready for CMake
 
 Restart VS Code window to have CMake reading the `CMakePresets.json` file. This will auto apply correct build tool chain for build compile.
 
-## Build Project
+
+
+## 1.8. Build Project
 
 At bottom left. Select configuration, for example `[DEBUG]`.
 
@@ -396,13 +430,25 @@ Then select `Build` to compile.
 
 ![build](README_image/build.png)
 
-## Debug project with cortex-debug
+
+
+
+
+
+
+
+
+
+
+# 2. Debug Project 
+
+This is using VS Code `Tasks` feature and Extention `cortex-debug`
 
 Create `.vscode/launch.json`
 
 > Device name may be comment out. It is just a reference.
 
-Template:
+## 2.1. Template:
 
 ```json
 {
@@ -439,7 +485,7 @@ Open debug tab. And `cortex-debug` should be available to run (F5).
 ![debug](README_image/debug.png)
 
 
-## Monitor Register Using SVG (System View Description) File
+## 2.2. Monitor Register Using SVG (System View Description) File
 
 Download SVG file from [ST website/STM32XXXX/CAD Resources](https://www.st.com/en/microcontrollers-microprocessors/stm32l432kc.html#cad-resources)
 
@@ -447,13 +493,13 @@ Place SVG file within project root and specifiy path in `launch.json`.
 
 ![svg](README_image/svg.png)
 
-## IntelliSense Setting
+## 2.3. IntelliSense Setting
 
 Configuring the auto complete and syntax detaction
 
 Create file `.vscode/c_cpp_preperties.json`
 
-Template:
+### 2.3.1. Template:
 
 ```json
 {
@@ -468,7 +514,7 @@ Template:
 }
 ```
 
-## Flash to Target
+## 2.4. Flash to Target
 
 Configuring the VS Code Run Task `Ctrl + Shift + P > run task + Enter` feature. This will allow auto excution of running custom terminal commands.
 
@@ -476,7 +522,7 @@ Create file `.vscode/tasks.json`
 
 > Setting Run Task shortcut (Ctrl + T) for VS Code is useful to excute the Flash .elf file command.
 
-Template:
+## 2.5. Template:
 
 ```json
 {
@@ -503,11 +549,11 @@ Template:
 }
 ```
 
-## .gitignore
+## 2.6. Setting of .gitignore
 
 Don't forget to set ignoring build files to avoid bloated git repo.
 
-gitignore rule:
+### 2.6.1. gitignore rule:
 ```
 build/
 ```
@@ -518,7 +564,7 @@ Best practice is to track only .ioc file in CubeMX folder.
 
 The rest of code generation should be treated as `build` files that does not get tracked.
 
-gitignore rule:
+### 2.6.2. gitignore rule:
 ```
 CubeMX/*
 !CubeMX/*.ioc
@@ -526,56 +572,140 @@ CubeMX/*
 
 
 
-## WSL
-Follow this: https://learn.microsoft.com/en-us/windows/wsl/setup/environment?source=recommendations
-
-Some BIOS need to enable virtualization
 
 
 
 
+# 3. Docker Container for STM32 CMake Compiling
 
-## Docker
+## 3.1. Dockerfile
 
+Dockerfile: https://github.com/jasonyang-ee/STM32-Dockerfile.git
 
-### Installation
-Install Docker Desktop: https://www.docker.com/products/docker-desktop/
+Example Project: https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE.git
 
-Enable Setting: "Use the WSL 2 based engine" and "Resources/WSL Integration/integration with my default WSL distro"
+## 3.2. Compiler
 
-
-
-### Build Your Own
-
-Dockerfile can be found in here:
-
-https://github.com/jasonyang-ee/STM32-Dockerfile.git
+ - ARM GNU x86_64-arm-none-eabi  (939 MB)
 
 
+## 3.3. Packages
 
-### Image Ready To Use
+- build-essential
+- git
+- cmake
+- ninja-build
+- stlink-tools
 
-- Ubuntu:
+
+
+
+
+
+
+
+# 4. Use of This Image
+
+This image is intended for building STM32 Microcontroller C/C++ Project Configured with CMake and Ninja.
+
+The CMake has the following initialization variable enforced.
+
 ```
-docker pull jasonyangee/stm32_ubuntu:latest
-```
-
-- Alpine:
-```
-docker pull jasonyangee/stm32_alpine:latest
-```
-
-
-
-### Run Container
-```
-docker run -it --privileged jasonyangee/stm32_ubuntu:latest
-docker run -it --privileged jasonyangee/stm32_alpine:latest
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE:PATH="${sourceDir}/cmake/gcc-arm-none-eabi.cmake" "-B /home/build/" -G Ninja
 ```
 
+## 4.1. Build Locally With Git Repo Link
+
+- Format:
+```bash
+docker run IMAGE:VERSION {Git_Repo_URL}
+```
+
+- Example:
+```bash
+docker run --name builder jasonyangee/stm32_ubuntu:latest https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE.git
+```
+
+- Optionally, you can copy out the binary files:
+```bash
+docker cp builder:/home/build/{TARGET_NAME}.elf
+docker cp builder:/home/build/{TARGET_NAME}.bin
+docker cp builder:/home/build/{TARGET_NAME}.hex
+```
 
 
-### Prepare USB passthrough to WSL Docker container
+
+## 4.2. Build Online With Github Action
+
+In the application Github repo, create file `.github\workflows\build.yml` with the following.
+
+This action script will build and upload binary outout to artifact for download.
+
+```yml
+name: 'Build with Ubuntu Container'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  BUILD_RELEASE:
+    runs-on: ubuntu-latest
+    container:
+      image: 'jasonyangee/stm32_ubuntu:latest'
+    steps:
+    - uses: actions/checkout@v3
+    - name: BUILD
+      run: build.sh
+
+	- name: Upload Binary .elf
+      uses: actions/upload-artifact@v2
+      with:
+        name: BINARY.elf
+        path: ${{ github.workspace }}/build/*.elf
+
+	- name: Upload Binary .bin
+      uses: actions/upload-artifact@v2
+      with:
+        name: BINARY.bin
+        path: ${{ github.workspace }}/build/*.bin
+```
+
+
+# 5. ST-Link
+
+ST Link Programmer has not yet been automated.
+
+
+
+## 5.1. Flash Device in Manual Usage
+
+Tool Details: https://github.com/stlink-org/stlink
+
+Using Windows machine is difficault to expose USB device to container.
+
+Using WSL maybe the only option for now. See next section.
+
+- Confirm Connnection:
+
+```shell
+st-info probe
+```
+
+- Manual Flash:
+
+```shell
+st-flash write {TARGET.bin} 0x8000000 --reset
+```
+
+- Manual Reset:
+```shell
+st-flash reset
+```
+
+
+
+## 5.2. Prepare USB Passthrough to WSL Docker Container
 Follow this:
 https://learn.microsoft.com/en-us/windows/wsl/connect-usb
 
@@ -594,12 +724,6 @@ sudo apt install linux-tools-5.4.0-77-generic hwdata
 sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-tools/5.4.0-77-generic/usbip 20
 ```
 
-- Optionally
-```shell
-sudo apt update
-sudo apt upgrade
-sudo apt autoremove
-```
 
 - Run cmd (admin mode) on Windows:
 
@@ -609,7 +733,7 @@ usbipd list
 
 ![](README_image/bind.png)
 
-Note the ST-Link ID and bind it
+- Note the ST-Link ID and bind it
 ```cmd
 usbipd bind --busid 3-5
 usbipd attach --busid 3-5
@@ -620,7 +744,7 @@ usbipd wsl list
 
 
 
-### Run Docker container
+## 5.3. Run Docker Container in WSL
 
 - Run WSL Ubuntu:
 ```shell
@@ -630,3 +754,24 @@ st-info --probe
 Note: `--privileged` is necessary to allow device port passthrough
 
 ![stlinked](README_image/stlinked.png)
+
+
+
+
+# 6. Github Badge
+
+It is a good practice to include build result badge in application repo.
+
+1. Nevigate to the action page, select the build workflow, and click create status badge:
+
+![badge](/README_image/badge.png)
+
+2. Copy the badge markdown string:
+
+![badge](/README_image/badgeMD.png)
+
+3. Paste it to the top of your application README.md file to show build result
+
+![badge](/README_image/badgeResult.png)
+
+
