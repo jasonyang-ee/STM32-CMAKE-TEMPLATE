@@ -11,6 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS	ON)
 set(PROJ_PATH                       ${CMAKE_CURRENT_SOURCE_DIR})
 message("Build type: "              ${CMAKE_BUILD_TYPE})
 
+# Must check your toolchain file name
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gcc-arm-none-eabi.cmake")
 
 #
