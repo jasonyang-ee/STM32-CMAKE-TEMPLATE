@@ -1,7 +1,4 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -11,13 +8,21 @@
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "stlink",
-            "device": "STM32L432KC",            //MCU used
-            "interface": "swd",                 //Interface setup
-            "serialNumber": "",                 //Set ST-Link ID if you use multiple at the same time
-            "runToEntryPoint": "main",          //Run to main and stop there
-            "svdFile": "${workspaceFolder}/STM32L4_svd/STM32L4_svd_V1.3/STM32L4x2.svd",         //SVD file to see reisters
+            "device": "STM32L432KC",            	//MCU used
+            "interface": "swd",                 	//Interface setup
+            "serialNumber": "",                 	//Set ST-Link ID if you use multiple at the same time
+            "runToEntryPoint": "main",          	//Run to main and stop there
+            "svdFile": "STM32_svd/STM32L4x2.svd",	//SVD file to see registers
             "v1": false,
-            "showDevDebugOutput": "both",
+            "showDevDebugOutput": "both"
+
+			// Will get automatically detected if STM32CubeIDE is installed to default directory or it can be manually provided if necessary..
+            // "serverpath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221\\tools\\bin\\ST-LINK_gdbserver.exe",
+            // "armToolchainPath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_2.0.0.202105311346\\tools\\bin",
+            // "stm32cubeprogrammer": "c:\\Program Files\\STMicroelectronics\\STM32Cube\\STM32CubeProgrammer\\bin",
+
+            // If you use external loader, add additional arguments
+            // "serverArgs": ["--extload", "path/to/ext/loader.stldr"],
         }
     ]
 }

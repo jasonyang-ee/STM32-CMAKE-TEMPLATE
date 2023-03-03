@@ -22,9 +22,11 @@ For Windows, download and place those in a centralized folder. Edit environment 
 
 - [Ninja](https://github.com/ninja-build/ninja/releases)
 
-- ST Link GDB Server (CubeIDE) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221`
+- [LLVM clang (Use win-64 installer with Add PATH option)](https://github.com/llvm/llvm-project/releases)
 
-- STM32_Programmer_CLI (CubeIDE) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.0.100.202110141430`
+- ST Link GDB Server (From CubeIDE Installation) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221`
+
+- STM32_Programmer_CLI (From CubeIDE Installation) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.0.100.202110141430`
 
 
 Run CMD to check toolchain installation.
@@ -44,21 +46,21 @@ ninja --version
 Install those extensions to allow better programming environment.
 ```
 Arm Assembly
-C/C++
 CMake
 CMake Tools
 Cortex-Debug
 LinkerScript
+clang-format
 ```
 
 Optionally: `` Ctrl + Shift + ` `` to open terminal, then enter (Shift + Ins) those command.
 ```shell
-code --install-extension ms-vscode.cpptools
 code --install-extension ms-vscode.cmake-tools
 code --install-extension twxs.cmake
 code --install-extension marus25.cortex-debug
 code --install-extension dan-c-underwood.arm
 code --install-extension zixuanwang.linkerscript
+code --install-extension clang-format
 ```
 
 
@@ -68,15 +70,11 @@ code --install-extension zixuanwang.linkerscript
 
 
 
-
-### 1.3.1. About CMakeLists.txt file
-
-Every CMake-based application requires `CMakeLists.txt` file *in the root directory*, that describes the project and provides input information for build system generation.
-> Root `CMakeLists.txt` file is sometimes called *top-level CMake* file
+Every CMake-based application requires root `CMakeLists.txt` file *in the root directory*, that describes the project and provides input information for build system generation.
 
 Essential things described in `CMakeLists.txt` file:
 
-- Toolchain information, such as GCC configuration with build flags
+- Toolchain information with cmake/.cmake file, such as GCC configuration with build flags
 - Project name
 - Source files to build with compiler, C, C++ or Assembly files
 - List of include paths for compiler to find functions, defines, ... (`-I`)
@@ -88,14 +86,16 @@ Essential things described in `CMakeLists.txt` file:
 
 
 
-## 1.4. Prepare .cmak file
+### 1.3.1. Prepare .cmake file
 
 CMake needs to be aware about Toolchain we would like to use to finally compile the project with. This file will be universal across projects.
 
 - Make new folder in project root: `cmake`
-- Make new file in /cmake: `cmake/gcc-arm-none-eabi.cmake`
+- Make new file in folder /cmake: `./cmake/gcc-arm-none-eabi.cmake`
 
-```cmake
+> Template:
+
+```makefile
 set(CMAKE_SYSTEM_NAME               Generic)
 set(CMAKE_SYSTEM_PROCESSOR          arm)
 
@@ -119,21 +119,20 @@ set(CMAKE_EXECUTABLE_SUFFIX_CXX     ".elf")
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 ```
 
-![.cmake in /cmake](README_image/cmake.png)
 
 
-
-
-## 1.5. Prepare CMakeLists.txt file
+### 1.3.2. Prepare CMakeLists.txt file
 
 We need to create main `CMakeLists.txt`, also called *root* CMake file.
-> Make sure you really name it `CMakeLists.txt` with correct upper and lowercase characters.
+
+_Make sure you really name it `CMakeLists.txt` with correct upper and lowercase characters._
 
 
 
 
-### 1.5.1. Template File as below.
-```cmake
+> Template:
+
+```makefile
 cmake_minimum_required(VERSION 3.22)
 
 # Setup compiler settings
@@ -143,19 +142,19 @@ set(CMAKE_C_EXTENSIONS              ON)
 set(CMAKE_CXX_STANDARD              17)
 set(CMAKE_CXX_STANDARD_REQUIRED     ON)
 set(CMAKE_CXX_EXTENSIONS            ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS	ON)
 set(PROJ_PATH                       ${CMAKE_CURRENT_SOURCE_DIR})
 message("Build type: "              ${CMAKE_BUILD_TYPE})
 
-#
+# Setup .camke file location
+set(CMAKE_TOOLCHAIN_FILE			"${CMAKE_CURRENT_SOURCE_DIR}/cmake/gcc-arm-none-eabi.cmake")
+
 # Core project settings
-#
 project(your-project-name)
 enable_language(C CXX ASM)
 
-#
 # Core MCU flags, CPU, instruction set and FPU setup
 # Needs to be set properly for your MCU
-#
 set(CPU_PARAMETERS
     -mthumb
 
@@ -169,23 +168,18 @@ set(CPU_PARAMETERS
 set(linker_script_SRC               ${PROJ_PATH}/path-to-linker-script.ld)
 set(EXECUTABLE                      ${CMAKE_PROJECT_NAME})
 
-#
+
 # List of source files to compile
-#
 set(sources_SRCS
     # Put here your source files, one in each line, relative to CMakeLists.txt file location
 )
 
-#
 # Include directories
-#
 set(include_path_DIRS
     # Put here your include dirs, one in each line, relative to CMakeLists.txt file location
 )
 
-#
 # Symbols definition
-#
 set(symbols_SYMB
     # Put here your symbols (preprocessor defines), one in each line
     # Encapsulate them with double quotes for safety purpose
@@ -245,23 +239,45 @@ add_custom_command(TARGET ${EXECUTABLE} POST_BUILD
 
 
 
-### 1.5.2. Be sure to edit template for the following:
-
-1. Name your project.
-`project(your-project-name)`
-1. Match this to your ARM type
-`
--mcpu=cortex-m7
--mfpu=fpv5-d16
--mfloat-abi=hard
-`
-![ARM Type](README_image/ARM_type.png)
-![ARM Type2](README_image/ARM_type2.png)
 
 
 
 
-### 1.5.3. General rule for settings would be as per table below
+### 1.3.3. Edit template for the following project specific setting:
+
+- Provide target name: `project`
+- Match ARM type setting: `CPU_PARAMETERS`
+- Point linker file path: `linker_script_SRC`
+- Update source file list: `sources_SRCS`
+- Update include path list: `include_path_DIRS`
+- Define MCU Model and USE_HAL_DRIVER for HAL library users: `symbols_SYMB`
+
+
+
+
+
+
+
+
+
+> **To get ARM type from STM32CubeIDE:**
+![ARM Type](doc/img_readme/ARM_type.png)
+![ARM Type2](doc/img_readme/ARM_type2.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> **General rule for settings would be as per table below:**
 
 |STM32 Family | -mcpu           | -mfpu         | -mfloat-abi |
 |-------------|-----------------|---------------|-------------|
@@ -285,89 +301,36 @@ add_custom_command(TARGET ${EXECUTABLE} POST_BUILD
 | STM32WL CM4 | `cortex-m4`     | `Not used`    | `soft`      |
 | STM32WL CM0 | `cortex-m0plus` | `Not used`    | `soft`      |
 
-1. Match this to your linker file name
-`set(linker_script_SRC   ${PROJ_PATH}/path-to-linker-script.ld)`  
-![linker](README_image/linker.png)
-
-1. Include all source file (.cpp .c)
-`set(sources_SRCS`  
-![source](README_image/source.png)
-
-
-
-### 1.5.4. The best way is to run an auto scan bash script for all the source file to avoid missing anything.
-
-In terminal `` Ctrl + ` ``, run `.\getIncludeList.sh` and `.\getSourceList.sh`
-
-This will generate the scanned source and header file and save in cmake folder.
-
-Template:
-
-```bash
-# Run .\getSourceList.sh in terminal to generate an updated list of source for CMake
-
-CORE_PATH='Core/*'
-DRIVERS_PATH='Drivers/*'
-FATFS_PATH='FATFS/*'
-MIDWARE_PATH='Middlewares/*'
-USB_PATH='USB_Device/*'
-
-CORE_SRC="$(eval find "$CORE_PATH" -type f -name '*.c' -o -name '*.cpp' -o -name '*.s')"
-DRIVERS_SRC="$(eval find "$DRIVERS_PATH" -type f -name '*.c')"
-FATFS_SRC="$(eval find "$FATFS_PATH" -type f -name '*.c')"
-MIDWARE_SRC="$(eval find "$MIDWARE_PATH" -type f -name '*.c')"
-USB_SRC="$(eval find "$USB_PATH" -type f -name '*.c')"
-
-# Print find result
-printf "$CORE_SRC\n$DRIVERS_SRC\n$FATFS_SRC\n$USB_SRC\n$MIDWARE_SRC" > cmake/SourceList.txt
-
-# Has bug
-#ALL_SRC="$(eval find * ! -wholename 'build/*' -type f -name '*.c' -o -name '*.cpp' -o -name '*.s')"
-#printf "$ALL_SRC" > test.txt
-
-# Adding ${PROJ_PATH}/ to beginning of each line
-sed -i 's/^/${PROJ_PATH}\//' cmake/SourceList.txt
-```
-
-```bash
-# Run .\getIncludeList.sh in terminal to generate an updated list of source for CMake
-
-CORE_PATH='Core/*'
-DRIVERS_PATH='Drivers/*'
-FATFS_PATH='FATFS/*'
-MIDWARE_PATH='Middlewares/*'
-USB_PATH='USB_Device/*'
-
-CORE_INC="$(eval find "$CORE_PATH" -type d -name 'Inc' -o -name 'Include')"
-DRIVERS_INC="$(eval find "$DRIVERS_PATH" -type d -name 'Inc' -o -name 'Include' -o -name 'Legacy')"
-FATFS_INC="$(eval find "$FATFS_PATH" -type d)"
-MIDWARE_INC="$(eval find "$MIDWARE_PATH" -type d -name 'Inc' -o -name 'src')"
-USB_INC="$(eval find "$USB_PATH" -type d)"
-
-# Print find result
-printf "$CORE_INC\n$DRIVERS_INC\n$FATFS_INC\n$MIDWARE_INC\n$USB_INC" > cmake/IncludeList.txt
-
-# Adding ${PROJ_PATH}/ to beginning of each line
-sed -i 's/^/${PROJ_PATH}\//' cmake/IncludeList.txt
-```
-
-1. Include all your header file path (.h)
-`set(include_path_DIRS`  
-![header](README_image/header.png)
-
-1. Define ARM and HAL variable
-`set(symbols_SYMB`  
-![Define](README_image/Define.png)
 
 
 
 
-## 1.6. Prepare CMakePresets.json file
+
+### 1.3.4. Source File and Include Path
+
+- Manually edit `sources_SRCS` and `include_path_DIRS` to capture all of your code file path.
+- This must include startup file `startup_stm32xxxx.s`
+
+
+### 1.3.5. Auto scan bash script has been made for STM32CubeMX generated files structure
+
+- In terminal `` Ctrl + ` ``, run `.\getIncludeList.sh` and `.\getSourceList.sh`
+
+- A list of scanned source and header will be saved in `/cmake` folder.
+
+> You may modify bash file to expend the auto file searching for more folders.
+
+> The bash simply scan `.c` `.cpp` `.s` file for source. And, it scan `/Inc` `/Include` for include path.
+
+
+
+## 1.4. Prepare CMakePresets.json file
 
 `CMakePresets.json` provides definition for user configuration. Having this file allows developer to quickly change between debug and release mode.
 
-Create file `CMakePresets.json` in Project Root
+- Create file `CMakePresets.json` in Project Root
 
+> Template:
 ```json
 {
     "version": 3,
@@ -416,19 +379,22 @@ Create file `CMakePresets.json` in Project Root
 
 
 
-## 1.7. Configure VS Code to be Ready for CMake
+## 1.5. Configure VS Code to be Ready for CMake
 
-Restart VS Code window to have CMake reading the `CMakePresets.json` file. This will auto apply correct build tool chain for build compile.
+- Restart VS Code workspace to have CMake reading `CMakePresets.json` file.
+- Cmake init commend will auto excute and construct `build` folder with `-G Ninja` option.
 
 
 
-## 1.8. Build Project
 
-At bottom left. Select configuration, for example `[DEBUG]`.
 
-Then select `Build` to compile.
+## 1.6. Build Project
 
-![build](README_image/build.png)
+- Select configuration at bottom left. For example: `[DEBUG]`.
+
+- Select `Build` to compile.
+
+![build](doc/img_readme/build.png)
 
 
 
@@ -444,32 +410,30 @@ Then select `Build` to compile.
 
 This is using VS Code `Tasks` feature and Extention `cortex-debug`
 
-Create `.vscode/launch.json`
+- Create `.vscode/launch.json`
 
-> Device name may be comment out. It is just a reference.
-
-## 2.1. Template:
+>Template:
 
 ```json
 {
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Microcontroller - STLink-V3",
-            "cwd": "${workspaceFolder}",                        //Path from where commands are executed
-            "type": "cortex-debug",                             //Debug 
-            "executable": "${command:cmake.launchTargetPath}",  //or fixed file path: build/project-name.elf
-            "request": "launch",                                //Use "attach" to connect to target w/o elf download
-            "servertype": "stlink",                             //Use stlink setup of cortex-M debug
-            "device": "STM32L432KC",                            //MCU used
-            "interface": "swd",                                 //Interface setup
-            "serialNumber": "",                                 //Set ST-Link ID if you use multiple at the same time
-            "runToEntryPoint": "main",                          //Run to main and stop there
-            "svdFile": "STM32L432KC.svd",                         //SVD file to see reisters
+            "name": "Cortex Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "stlink",
+            "device": "STM32L432KC",            	//MCU used
+            "interface": "swd",                 	//Interface setup
+            "serialNumber": "",                 	//Set ST-Link ID if you use multiple at the same time
+            "runToEntryPoint": "main",          	//Run to main and stop there
+            "svdFile": "STM32_svd/STM32L4x2.svd",	//SVD file to see registers
             "v1": false,
-            "showDevDebugOutput": "both",
+            "showDevDebugOutput": "both"
 
-            // Will get automatically detected if STM32CubeIDE is installed to default directory or it can be manually provided if necessary..
+			// Will get automatically detected if STM32CubeIDE is installed to default directory or it can be manually provided if necessary..
             // "serverpath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221\\tools\\bin\\ST-LINK_gdbserver.exe",
             // "armToolchainPath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_2.0.0.202105311346\\tools\\bin",
             // "stm32cubeprogrammer": "c:\\Program Files\\STMicroelectronics\\STM32Cube\\STM32CubeProgrammer\\bin",
@@ -480,49 +444,45 @@ Create `.vscode/launch.json`
     ]
 }
 ```
-Open debug tab. And `cortex-debug` should be available to run (F5).
-
-![debug](README_image/debug.png)
 
 
-## 2.2. Monitor Register Using SVG (System View Description) File
 
-Download SVG file from [ST website/STM32XXXX/CAD Resources](https://www.st.com/en/microcontrollers-microprocessors/stm32l432kc.html#cad-resources)
+- Open debug tab. And our named debug preset `Cortex Debug` should be available to run (F5).
 
-Place SVG file within project root and specifiy path in `launch.json`.
+![debug](doc/img_readme/debug.png)
 
-![svg](README_image/svg.png)
 
-## 2.3. IntelliSense Setting
 
-Configuring the auto complete and syntax detaction
 
-Create file `.vscode/c_cpp_preperties.json`
+## 2.1. Monitor Register Using SVG (System View Description) File
 
-### 2.3.1. Template:
+- Download SVG file from [ST website/STM32XXXX/CAD Resources](https://www.st.com/en/microcontrollers-microprocessors/stm32l432kc.html#cad-resources)
 
-```json
-{
-    "version": 4,
-    "configurations": [
-        {
-            "name": "STM32",
-            "intelliSenseMode": "${default}",
-            "configurationProvider": "ms-vscode.cmake-tools"
-        }
-    ]
-}
-```
+- Place SVG file within project root and specifiy path in `launch.json`.
 
-## 2.4. Flash to Target
+> Download of SVG file:
 
-Configuring the VS Code Run Task `Ctrl + Shift + P > run task + Enter` feature. This will allow auto excution of running custom terminal commands.
+![svg](doc/img_readme/svg.png)
 
-Create file `.vscode/tasks.json`
 
-> Setting Run Task shortcut (Ctrl + T) for VS Code is useful to excute the Flash .elf file command.
 
-## 2.5. Template:
+
+
+
+
+
+
+
+
+# 3. Flash to Target
+
+Configuring the VS Code Run Task `Ctrl + Shift + P` -> type: `run task` -> `Enter` feature. This will allow auto excution of running custom terminal commands.
+
+Setting keyboard short cut `Ctrl + T` for this is going to help you very much.
+
+- Create file `.vscode/tasks.json`
+
+> Template:
 
 ```json
 {
@@ -530,7 +490,7 @@ Create file `.vscode/tasks.json`
 	"tasks": [
 		{
 			"type": "shell",
-			"label": "CubeProg: Flash project (SWD)",
+			"label": "Windows: Flash Firmware",
 			"command": "STM32_Programmer_CLI",
 			"args": [
 				"--connect",
@@ -549,22 +509,22 @@ Create file `.vscode/tasks.json`
 }
 ```
 
-## 2.6. Setting of .gitignore
+## 3.1. Setting of .gitignore
 
-Don't forget to set ignoring build files to avoid bloated git repo.
+To avoid bloating the repository, please do not push build file. The have stable building process, docker with Github action is desired.
 
-### 2.6.1. gitignore rule:
+- Create file `.gitignore` in root folder.
+
+> .gitignore rule:
 ```
 build/
 ```
 
-Optionally, you may still keep STM32CubeMX Project for Pin Management and Code Generation
+Optionally, you may still keep STM32CubeMX project for Pin Map management and code generation
 
-Best practice is to track only .ioc file in CubeMX folder.
+Best practice is to track only `.ioc` file in CubeMX folder.
 
-The rest of code generation should be treated as `build` files that does not get tracked.
-
-### 2.6.2. gitignore rule:
+> .gitignore rule:
 ```
 CubeMX/*
 !CubeMX/*.ioc
@@ -575,21 +535,20 @@ CubeMX/*
 
 
 
+# 4. Docker Container for STM32 CMake Compiling
 
-# 3. Docker Container for STM32 CMake Compiling
-
-## 3.1. Dockerfile
+## 4.1. Dockerfile
 
 Dockerfile: https://github.com/jasonyang-ee/STM32-Dockerfile.git
 
 Example Project: https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE.git
 
-## 3.2. Compiler
+## 4.2. Compiler
 
  - ARM GNU x86_64-arm-none-eabi  (939 MB)
 
 
-## 3.3. Packages
+## 4.3. Packages
 
 - build-essential
 - git
@@ -601,20 +560,24 @@ Example Project: https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE.git
 
 
 
-
-
-
-# 4. Use of This Image
+# 5. Use of This Image
 
 This image is intended for building STM32 Microcontroller C/C++ Project Configured with CMake and Ninja.
 
-The CMake has the following initialization variable enforced.
+`CMAKE_TOOLCHAIN_FILE` must be defined in your project CMakeList.txt file.
 
-```
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE:PATH="${sourceDir}/cmake/gcc-arm-none-eabi.cmake" "-B /home/build/" -G Ninja
+Default build type is `Release`.
+
+
+- Help Menu
+```bash
+docker run jasonyangee/stm32_ubuntu:latest --help
 ```
 
-## 4.1. Build Locally With Git Repo Link
+
+
+
+## 5.1. Build Locally With Git Repo Link
 
 - Format:
 ```bash
@@ -635,7 +598,28 @@ docker cp builder:/home/build/{TARGET_NAME}.hex
 
 
 
-## 4.2. Build Online With Github Action
+
+## 5.2. Build Locally With Mounted Volume
+
+Replace the `Local/Host/Project/Path` with your actual project folder path on local machine.
+
+Binary Output `.bin` `.elf` `.hex` are located in your `project/path/build`.
+
+- Format:
+```bash
+docker run -v "{Local/Host/Project/Path}":"/build" IMAGE:VERSION /build
+```
+
+- Example:
+```bash
+docker run -v "F:\Project\STM32-CMAKE-TEMPLATE2":"/build" jasonyangee/stm32_ubuntu:latest
+```
+
+
+
+
+
+## 5.3. Build Online With Github Action
 
 In the application Github repo, create file `.github\workflows\build.yml` with the following.
 
@@ -658,13 +642,13 @@ jobs:
     - name: BUILD
       run: build.sh
 
-	- name: Upload Binary .elf
+    - name: Upload Binary .elf
       uses: actions/upload-artifact@v2
       with:
         name: BINARY.elf
         path: ${{ github.workspace }}/build/*.elf
 
-	- name: Upload Binary .bin
+	  - name: Upload Binary .bin
       uses: actions/upload-artifact@v2
       with:
         name: BINARY.bin
@@ -672,13 +656,82 @@ jobs:
 ```
 
 
-# 5. ST-Link
+
+
+
+
+# 6. Build Image from Dockerfile
+
+If you choose to build this image from Dockerfile.
+
+
+## 6.1. User Modifications
+
+**Check ARM releases at here: <https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads/>**
+
+- Modify `ARM_VERSION=12.2.rel1` for enforcing compiler version.
+
+- If pulling latest version is desired, insert this line before `curl` command
+
+```docker
+&& ARM_VERSION=$(curl -s https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads | grep -Po '<h4>Version \K.+(?=</h4>)') \
+```
+
+
+## 6.2. Pre Configured VS Code Tasks has been setup to build automatically
+
+- Modify the build arguments in `.vscode/tasks.json` if you wish to have different image name.
+```
+stm32_ubuntu:latest",
+```
+- `Ctrl + Shift + p` and enter `run task` and choose the build options: `Build Ubuntu`.
+
+
+
+## 6.3. Build Bash Command Example
+
+```bash
+docker build -t stm32_ubuntu:latest -f Dockerfile.ubuntu .
+```
+
+
+
+
+
+# 7. Manual Image Usage
+
+- Override ENTRYPOINT to keep interactive mode live:
+```
+docker run -it --entrypoint /bin/bash jasonyangee/stm32_ubuntu:latest
+```
+
+- `cd` to your desired work directory
+
+- Copy your files either using `> Docker cp` or `$ git clone`
+
+- Initialize CMake:
+```bash
+cmake -DCMAKE_BUILD_TYPE=Release "-B build/" -G Ninja
+```
+
+- Compile:
+```bash
+cmake --build build/ -j 10
+```
+
+
+
+
+
+On pushing of the branch main, Github will automatically test build your application.
+
+
+
+# 8. ST-Link
 
 ST Link Programmer has not yet been automated.
 
-
-
-## 5.1. Flash Device in Manual Usage
+## 8.1. Flash Device in Manual Usage
 
 Tool Details: https://github.com/stlink-org/stlink
 
@@ -703,9 +756,7 @@ st-flash write {TARGET.bin} 0x8000000 --reset
 st-flash reset
 ```
 
-
-
-## 5.2. Prepare USB Passthrough to WSL Docker Container
+## 8.2. Prepare USB Passthrough to WSL Docker Container
 Follow this:
 https://learn.microsoft.com/en-us/windows/wsl/connect-usb
 
@@ -744,11 +795,11 @@ usbipd wsl list
 
 
 
-## 5.3. Run Docker Container in WSL
+## 8.3. Run Docker Container in WSL
 
 - Run WSL Ubuntu:
 ```shell
-docker run -it --privileged jasonyangee/stm32_alpine:latest
+docker run -it --privileged --entrypoint /bin/bash jasonyangee/stm32_ubuntu:latest
 st-info --probe
 ```
 Note: `--privileged` is necessary to allow device port passthrough
@@ -757,21 +808,30 @@ Note: `--privileged` is necessary to allow device port passthrough
 
 
 
+# 9. Github Action Variables
 
-# 6. Github Badge
+```c
+vars.REGISTRY					// Github package link (private: ghcr.io  -  org: ghcr.io/Org_Name)
+secrete.DOCKERHUB_TOKEN			// Docker Hub login token
+secrete.DOCKERHUB_USERNAME		// Docker Hub username
+secrete.TOKEN_GITHUB_PERSONAL	// Github package token
+secrete.USER_GITHUB_PERSONAL	// Github package username
+```
+
+# 10. Github Badge
 
 It is a good practice to include build result badge in application repo.
 
 1. Nevigate to the action page, select the build workflow, and click create status badge:
 
-![badge](/README_image/badge.png)
+![badge](/doc/img_readme/badge.png)
 
 2. Copy the badge markdown string:
 
-![badge](/README_image/badgeMD.png)
+![badge](/doc/img_readme/badgeMD.png)
 
 3. Paste it to the top of your application README.md file to show build result
 
-![badge](/README_image/badgeResult.png)
+![badge](/doc/img_readme/badgeResult.png)
 
 

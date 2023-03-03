@@ -11,23 +11,21 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS	ON)
 set(PROJ_PATH                       ${CMAKE_CURRENT_SOURCE_DIR})
 message("Build type: "              ${CMAKE_BUILD_TYPE})
 
-# Must check your toolchain file name
-set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gcc-arm-none-eabi.cmake")
+# Setup .camke file location
+set(CMAKE_TOOLCHAIN_FILE			"${CMAKE_CURRENT_SOURCE_DIR}/cmake/gcc-arm-none-eabi.cmake")
 
-#
+
 # Core project settings
-#
 project(L432KC)
 enable_language(C CXX ASM)
 
-#
+
 # Core MCU flags, CPU, instruction set and FPU setup
 # Needs to be set properly for your MCU
-#
 set(CPU_PARAMETERS
     -mthumb
-
-    # This needs attention to properly set for used MCU
+	
+	# This needs attention to properly set for used MCU
     -mcpu=cortex-m4
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
@@ -37,9 +35,8 @@ set(CPU_PARAMETERS
 set(linker_script_SRC               ${PROJ_PATH}/Core/STM32L432KCUX_FLASH.ld)
 set(EXECUTABLE                      ${CMAKE_PROJECT_NAME})
 
-#
+
 # List of source files to compile
-#
 set(sources_SRCS
     # Put here your source files, one in each line, relative to CMakeLists.txt file location
 	${PROJ_PATH}/Core/Src/main.c
@@ -68,9 +65,8 @@ set(sources_SRCS
 	${PROJ_PATH}/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
 )
 
-#
+
 # Include directories
-#
 set(include_path_DIRS
     # Put here your include dirs, one in each line, relative to CMakeLists.txt file location
     ${PROJ_PATH}/Core/Inc
@@ -80,9 +76,8 @@ set(include_path_DIRS
     ${PROJ_PATH}/Drivers/CMSIS/Include
 )
 
-#
+
 # Symbols definition
-#
 set(symbols_SYMB
     # Put here your symbols (preprocessor defines), one in each line
     # Encapsulate them with double quotes for safety purpose
