@@ -1,29 +1,27 @@
-name: 'Build Binary Ubuntu'
+name: "Build Binary Ubuntu"
 on:
   push:
     branches:
       - main
-    tags:
-      - '*'
 
 jobs:
   BUILD_RELEASE:
     runs-on: ubuntu-latest
     container:
-      image: 'jasonyangee/stm32_ubuntu:latest'
+      image: "jasonyangee/stm32_ubuntu:latest"
     steps:
-    - uses: actions/checkout@v3
-    - name: BUILD
-      run: build.sh
+      - uses: actions/checkout@v3
+      - name: BUILD
+        run: build.sh
 
-    - name: Upload Binary .elf
-      uses: actions/upload-artifact@v2
-      with:
-        name: BINARY.elf
-        path: ${{ github.workspace }}/build/*.elf
+      - name: Upload Binary .elf
+        uses: actions/upload-artifact@v2
+        with:
+          name: BINARY.elf
+          path: ${{ github.workspace }}/build/*.elf
 
-    - name: Upload Binary .bin
-      uses: actions/upload-artifact@v2
-      with:
-        name: BINARY.bin
-        path: ${{ github.workspace }}/build/*.bin
+      - name: Upload Binary .bin
+        uses: actions/upload-artifact@v2
+        with:
+          name: BINARY.bin
+          path: ${{ github.workspace }}/build/*.bin

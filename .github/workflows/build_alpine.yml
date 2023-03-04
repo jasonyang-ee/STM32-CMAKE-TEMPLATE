@@ -1,17 +1,27 @@
-name: 'Build Binary Alpine'
+name: "Build Binary Alpine"
 on:
   push:
     branches:
       - main
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   BUILD_RELEASE:
     runs-on: ubuntu-latest
     container:
-      image: 'jasonyangee/stm32_alpine:latest'
+      image: "jasonyangee/stm32_alpine:latest"
     steps:
-    - uses: actions/checkout@v3
-    - name: BUILD
-      run: build.sh
+      - uses: actions/checkout@v3
+      - name: BUILD
+        run: build.sh
+
+      - name: Upload Binary .elf
+        uses: actions/upload-artifact@v2
+        with:
+          name: BINARY.elf
+          path: ${{ github.workspace }}/build/*.elf
+
+      - name: Upload Binary .bin
+        uses: actions/upload-artifact@v2
+        with:
+          name: BINARY.bin
+          path: ${{ github.workspace }}/build/*.bin
