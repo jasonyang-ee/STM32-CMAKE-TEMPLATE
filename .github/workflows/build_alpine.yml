@@ -8,7 +8,7 @@ jobs:
   BUILD_RELEASE:
     runs-on: ubuntu-latest
     container:
-      image: "jasonyangee/stm32_alpine:latest"
+      image: "ghcr.io/jasonyang-ee/stm32_alpine:latest"
     steps:
       - uses: actions/checkout@v3
       - name: BUILD
