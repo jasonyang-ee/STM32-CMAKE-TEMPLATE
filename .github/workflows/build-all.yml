@@ -1,0 +1,59 @@
+name: "Build Binary"
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  github-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Dependencies
+        run: |
+          sudo apt install -y \
+            	build-essential \
+              gcc-arm-none-eabi \
+              binutils-arm-none-eabi \
+              cmake ninja-build \
+              git \
+              stlink-tools \
+              xz-utils curl
+
+      - name: Checkout Files
+        uses: actions/checkout@v3
+
+      - name: Build Init
+        run: cmake -DCMAKE_BUILD_TYPE=Release "-B $GITHUB_WORKSPACE/build" -G Ninja
+
+      - name: Build
+        run: cmake --build $GITHUB_WORKSPACE/build -j 10
+
+  alpine-build:
+    runs-on: ubuntu-latest
+    container:
+      image: "ghcr.io/jasonyang-ee/stm32_alpine:latest"
+    steps:
+      - uses: actions/checkout@v3
+      - name: BUILD
+        run: build.sh
+
+  ubuntu-build-upload:
+    runs-on: ubuntu-latest
+    container:
+      image: "ghcr.io/jasonyang-ee/stm32_ubuntu:latest"
+    steps:
+      - uses: actions/checkout@v3
+      - name: BUILD
+        run: build.sh
+
+      - name: Upload Binary .elf
+        uses: actions/upload-artifact@v2
+        with:
+          name: BINARY.elf
+          path: ${{ github.workspace }}/build/*.elf
+
+      - name: Upload Binary .bin
+        uses: actions/upload-artifact@v2
+        with:
+          name: BINARY.bin
+          path: ${{ github.workspace }}/build/*.bin

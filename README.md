@@ -1,14 +1,11 @@
-[![Build Binary Alpine](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_alpine.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_alpine.yml)
-[![Build Binary Ubuntu](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_ubuntu.yml)
-[![Build Binary Ubuntu](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_github.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_github.yml)
-> ^ Build Binary Files Are in Each Action Job's Artifact ^
+[![Build Binary](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_all.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_all.yml)
 
 
 # 1. Setting Up VS Code to Build STM32 Using CMake
 
 Project Using STM32L432KC as Example. Test hardware is NUCLEO-L432KC.
 
-
+Credit To: https://github.com/MaJerle/stm32-cube-cmake-vscode
 
 
 
@@ -24,10 +21,11 @@ For Windows, download and place those in a centralized folder. Edit environment 
 
 - [LLVM clang (Use win-64 installer with Add PATH option)](https://github.com/llvm/llvm-project/releases)
 
-- ST Link GDB Server (From CubeIDE Installation) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221`
+- [Windows] ST Link GDB Server (From CubeIDE Installation) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221`
 
-- STM32_Programmer_CLI (From CubeIDE Installation) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.0.100.202110141430`
+- [Windows] STM32_Programmer_CLI (From CubeIDE Installation) `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.0.100.202110141430`
 
+- [Linux] https://github.com/stlink-org/stlink
 
 Run CMD to check toolchain installation.
 ```
@@ -43,14 +41,13 @@ ninja --version
 
 ## 1.2. VS Code Extensions
 
-Install those extensions to allow better programming environment.
+Install those extensions to enable compiling and debugging.
 ```
 Arm Assembly
 CMake
 CMake Tools
 Cortex-Debug
 LinkerScript
-clang-format
 ```
 
 Optionally: `` Ctrl + Shift + ` `` to open terminal, then enter (Shift + Ins) those command.
@@ -60,7 +57,6 @@ code --install-extension twxs.cmake
 code --install-extension marus25.cortex-debug
 code --install-extension dan-c-underwood.arm
 code --install-extension zixuanwang.linkerscript
-code --install-extension clang-format
 ```
 
 
@@ -534,291 +530,33 @@ CubeMX/*
 
 
 
-
-# 4. Docker Container for STM32 CMake Compiling
-
-## 4.1. Dockerfile
+# 4. Docker Container for STM32 CMake & Ninja Compiling
 
 Dockerfile: https://github.com/jasonyang-ee/STM32-Dockerfile.git
 
-Example Project: https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE.git
+-+- TL;DR -+-
 
-## 4.2. Compiler
-
- - ARM GNU x86_64-arm-none-eabi  (939 MB)
-
-
-## 4.3. Packages
-
-- build-essential
-- git
-- cmake
-- ninja-build
-- stlink-tools
-
-
-
-
-
-# 5. Use of This Image
-
-This image is intended for building STM32 Microcontroller C/C++ Project Configured with CMake and Ninja.
-
-`CMAKE_TOOLCHAIN_FILE` must be defined in your project CMakeList.txt file.
-
-Default build type is `Release`.
-
-
-- Help Menu
+This docker image auto clone an online git repo and compile the CMake & Ninja supported STM32 project locally on your computer with mounted volume.
 ```bash
-docker run jasonyangee/stm32_ubuntu:latest --help
+docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32_ubuntu:latest {Git_Repo_URL}
 ```
 
+![Run](doc/img_readme/run_time.gif)
 
+## 4.1. Docker Image
 
 
-## 5.1. Build Locally With Git Repo Link
+Public Registry:
+> ghcr.io/jasonyang-ee/stm32_alpine:latest
 
-- Format:
-```bash
-docker run IMAGE:VERSION {Git_Repo_URL}
-```
+> ghcr.io/jasonyang-ee/stm32_ubuntu:latest
 
-- Example:
-```bash
-docker run --name builder jasonyangee/stm32_ubuntu:latest https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE.git
-```
+> jasonyangee/stm32_alpine:latest
 
-- Optionally, you can copy out the binary files:
-```bash
-docker cp builder:/home/build/{TARGET_NAME}.elf
-docker cp builder:/home/build/{TARGET_NAME}.bin
-docker cp builder:/home/build/{TARGET_NAME}.hex
-```
+> jasonyangee/stm32_ubuntu:latest
 
 
-
-
-## 5.2. Build Locally With Mounted Volume
-
-Replace the `Local/Host/Project/Path` with your actual project folder path on local machine.
-
-Binary Output `.bin` `.elf` `.hex` are located in your `project/path/build`.
-
-- Format:
-```bash
-docker run -v "{Local/Host/Project/Path}":"/build" IMAGE:VERSION /build
-```
-
-- Example:
-```bash
-docker run -v "F:\Project\STM32-CMAKE-TEMPLATE2":"/build" jasonyangee/stm32_ubuntu:latest
-```
-
-
-
-
-
-## 5.3. Build Online With Github Action
-
-In the application Github repo, create file `.github\workflows\build.yml` with the following.
-
-This action script will build and upload binary outout to artifact for download.
-
-```yml
-name: 'Build with Ubuntu Container'
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  BUILD_RELEASE:
-    runs-on: ubuntu-latest
-    container:
-      image: 'jasonyangee/stm32_ubuntu:latest'
-    steps:
-    - uses: actions/checkout@v3
-    - name: BUILD
-      run: build.sh
-
-    - name: Upload Binary .elf
-      uses: actions/upload-artifact@v2
-      with:
-        name: BINARY.elf
-        path: ${{ github.workspace }}/build/*.elf
-
-	  - name: Upload Binary .bin
-      uses: actions/upload-artifact@v2
-      with:
-        name: BINARY.bin
-        path: ${{ github.workspace }}/build/*.bin
-```
-
-
-
-
-
-
-# 6. Build Image from Dockerfile
-
-If you choose to build this image from Dockerfile.
-
-
-## 6.1. User Modifications
-
-**Check ARM releases at here: <https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads/>**
-
-- Modify `ARM_VERSION=12.2.rel1` for enforcing compiler version.
-
-- If pulling latest version is desired, insert this line before `curl` command
-
-```docker
-&& ARM_VERSION=$(curl -s https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads | grep -Po '<h4>Version \K.+(?=</h4>)') \
-```
-
-
-## 6.2. Pre Configured VS Code Tasks has been setup to build automatically
-
-- Modify the build arguments in `.vscode/tasks.json` if you wish to have different image name.
-```
-stm32_ubuntu:latest",
-```
-- `Ctrl + Shift + p` and enter `run task` and choose the build options: `Build Ubuntu`.
-
-
-
-## 6.3. Build Bash Command Example
-
-```bash
-docker build -t stm32_ubuntu:latest -f Dockerfile.ubuntu .
-```
-
-
-
-
-
-# 7. Manual Image Usage
-
-- Override ENTRYPOINT to keep interactive mode live:
-```
-docker run -it --entrypoint /bin/bash jasonyangee/stm32_ubuntu:latest
-```
-
-- `cd` to your desired work directory
-
-- Copy your files either using `> Docker cp` or `$ git clone`
-
-- Initialize CMake:
-```bash
-cmake -DCMAKE_BUILD_TYPE=Release "-B build/" -G Ninja
-```
-
-- Compile:
-```bash
-cmake --build build/ -j 10
-```
-
-
-
-
-
-On pushing of the branch main, Github will automatically test build your application.
-
-
-
-# 8. ST-Link
-
-ST Link Programmer has not yet been automated.
-
-## 8.1. Flash Device in Manual Usage
-
-Tool Details: https://github.com/stlink-org/stlink
-
-Using Windows machine is difficault to expose USB device to container.
-
-Using WSL maybe the only option for now. See next section.
-
-- Confirm Connnection:
-
-```shell
-st-info probe
-```
-
-- Manual Flash:
-
-```shell
-st-flash write {TARGET.bin} 0x8000000 --reset
-```
-
-- Manual Reset:
-```shell
-st-flash reset
-```
-
-## 8.2. Prepare USB Passthrough to WSL Docker Container
-Follow this:
-https://learn.microsoft.com/en-us/windows/wsl/connect-usb
-
-- Run cmd (admin mode) on Windows:
-
-```cmd
-winget install --interactive --exact dorssel.usbipd-win
-wsl --update
-wsl --shutdown
-```
-
-- Run (restart) WSL Ubuntu:
-
-```shell
-sudo apt install linux-tools-5.4.0-77-generic hwdata
-sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-tools/5.4.0-77-generic/usbip 20
-```
-
-
-- Run cmd (admin mode) on Windows:
-
-```cmd
-usbipd list
-```
-
-![](README_image/bind.png)
-
-- Note the ST-Link ID and bind it
-```cmd
-usbipd bind --busid 3-5
-usbipd attach --busid 3-5
-usbipd wsl list
-```
-
-![](README_image/attached.png)
-
-
-
-## 8.3. Run Docker Container in WSL
-
-- Run WSL Ubuntu:
-```shell
-docker run -it --privileged --entrypoint /bin/bash jasonyangee/stm32_ubuntu:latest
-st-info --probe
-```
-Note: `--privileged` is necessary to allow device port passthrough
-
-![stlinked](README_image/stlinked.png)
-
-
-
-# 9. Github Action Variables
-
-```c
-vars.REGISTRY					// Github package link (private: ghcr.io  -  org: ghcr.io/Org_Name)
-secrete.DOCKERHUB_TOKEN			// Docker Hub login token
-secrete.DOCKERHUB_USERNAME		// Docker Hub username
-secrete.TOKEN_GITHUB_PERSONAL	// Github package token
-secrete.USER_GITHUB_PERSONAL	// Github package username
-```
-
-# 10. Github Badge
+# 5. Github Badge
 
 It is a good practice to include build result badge in application repo.
 
