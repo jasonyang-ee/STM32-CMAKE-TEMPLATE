@@ -1,4 +1,4 @@
-[![Build Binary](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_all.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build_all.yml)
+[![Build Binary](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build-all.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build-all.yml)
 
 
 # 1. Setting Up VS Code to Build STM32 Using CMake
