@@ -138,12 +138,12 @@ set(CMAKE_C_EXTENSIONS              ON)
 set(CMAKE_CXX_STANDARD              17)
 set(CMAKE_CXX_STANDARD_REQUIRED     ON)
 set(CMAKE_CXX_EXTENSIONS            ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS	ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS   ON)
 set(PROJ_PATH                       ${CMAKE_CURRENT_SOURCE_DIR})
 message("Build type: "              ${CMAKE_BUILD_TYPE})
 
 # Setup .camke file location
-set(CMAKE_TOOLCHAIN_FILE			"${CMAKE_CURRENT_SOURCE_DIR}/cmake/gcc-arm-none-eabi.cmake")
+set(CMAKE_TOOLCHAIN_FILE            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/gcc-arm-none-eabi.cmake")
 
 # Core project settings
 project(your-project-name)
@@ -507,7 +507,7 @@ Setting keyboard short cut `Ctrl + T` for this is going to help you very much.
 
 ## 3.1. Setting of .gitignore
 
-To avoid bloating the repository, please do not push build file. The have stable building process, docker with Github action is desired.
+To avoid bloating the repository, please do not push build file. To have stable building process, docker with Github action is desired.
 
 - Create file `.gitignore` in root folder.
 
