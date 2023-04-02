@@ -21,6 +21,9 @@
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
+
+#ifndef CORE_INC_STM32L4XX_HAL_CONF
+#define CORE_INC_STM32L4XX_HAL_CONF
 #ifndef STM32L4xx_HAL_CONF_H
 #define STM32L4xx_HAL_CONF_H
 
@@ -40,6 +43,7 @@
 /*#define HAL_CRYP_MODULE_ENABLED   */
 /*#define HAL_CAN_MODULE_ENABLED   */
 /*#define HAL_COMP_MODULE_ENABLED   */
+/*#define HAL_I2C_MODULE_ENABLED   */
 /*#define HAL_CRC_MODULE_ENABLED   */
 /*#define HAL_CRYP_MODULE_ENABLED   */
 /*#define HAL_DAC_MODULE_ENABLED   */
@@ -85,7 +89,6 @@
 /*#define HAL_PSSI_MODULE_ENABLED   */
 #define HAL_GPIO_MODULE_ENABLED
 #define HAL_EXTI_MODULE_ENABLED
-#define HAL_I2C_MODULE_ENABLED
 #define HAL_DMA_MODULE_ENABLED
 #define HAL_RCC_MODULE_ENABLED
 #define HAL_FLASH_MODULE_ENABLED
@@ -480,3 +483,6 @@
 #endif
 
 #endif /* STM32L4xx_HAL_CONF_H */
+
+
+#endif    /* CORE_INC_STM32L4XX_HAL_CONF */

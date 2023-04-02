@@ -466,6 +466,17 @@ This is using VS Code `Tasks` feature and Extention `cortex-debug`
 
 
 
+# Start Programming STM32
+
+It will save you a good amount of time to use CubeMX to generate base files. Whether if using HAL or LL is entirely up to you. But the pin map tracking is absolutly great. So, let's start!
+
+- You will complete your MCU setup per project needs (pin, clock, etc..).
+- 
+
+
+
+
+
 
 
 
