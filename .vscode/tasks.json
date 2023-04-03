@@ -56,6 +56,21 @@
 		},
 		{
 			"type": "shell",
+			"label": "Windows: Reset Device",
+			"command": "STM32_Programmer_CLI",
+			"args": [
+				"--connect",
+				"port=swd",
+				"-rst",
+				"-run"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": []
+		},
+		{
+			"type": "shell",
 			"label": "Linux: Flash Firmware",
 			"command": "st-flash",
 			"args": [
