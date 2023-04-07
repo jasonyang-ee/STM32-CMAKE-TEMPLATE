@@ -2,7 +2,7 @@ name: "Build Binary"
 on:
   push:
     branches:
-      - main
+      - "*"
 
 jobs:
   github-build:
