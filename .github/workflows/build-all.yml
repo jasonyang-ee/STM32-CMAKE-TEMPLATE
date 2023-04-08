@@ -69,6 +69,7 @@ jobs:
 
   pr-check:
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: [github-build, arch-build, alpine-build, ubuntu-build-upload,]
     steps:
     - name: PR Check
