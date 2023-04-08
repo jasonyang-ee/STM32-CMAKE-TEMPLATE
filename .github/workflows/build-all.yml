@@ -68,10 +68,15 @@ jobs:
           path: ${{ github.workspace }}/build/*.bin
 
   pr-check:
-    runs-on: ubuntu-latest
     if: ${{ always() }}
-    needs: [github-build, arch-build, alpine-build, ubuntu-build-upload,]
+    needs:
+      - github-build
+      - arch-build
+      - alpine-build
+      - ubuntu-build-upload
+    runs-on: ubuntu-latest
     steps:
-    - name: PR Check
-      if: ${{ failure() }}
-      run: exit 1
+    - name: Decide whether the needed jobs succeeded or failed
+      uses: re-actors/alls-green@release/v1
+      with:
+        jobs: ${{ toJSON(needs) }}
