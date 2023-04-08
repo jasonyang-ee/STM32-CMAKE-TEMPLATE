@@ -1,0 +1,33 @@
+{
+	"name": "STM32",
+	"image": "ghcr.io/jasonyang-ee/stm32-builder:Ubuntu-latest",
+	"privileged": true,
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dan-c-underwood.arm",
+				"jeff-hykin.better-cpp-syntax",
+				"ms-vscode.cpptools",
+				"akiramiyakoda.cppincludeguard",
+				"xaver.clang-format",
+				"twxs.cmake",
+				"ms-vscode.cmake-tools",
+				"adpyke.codesnap",
+				"mcu-debug.debug-tracker-vscode",
+				"marus25.cortex-debug",
+				"ms-vscode-remote.remote-containers",
+				"ms-azuretools.vscode-docker",
+				"cschlosser.doxdocgen",
+				"mhutchie.git-graph",
+				"donjayamanne.githistory",
+				"eamodio.gitlens",
+				"zixuanwang.linkerscript",
+				"bierner.markdown-preview-github-styles",
+				"mcu-debug.memory-view",
+				"mcu-debug.rtos-views",
+				"albert.tabout",
+				"ms-vscode-remote.remote-wsl"
+			]
+		}
+	}
+}
