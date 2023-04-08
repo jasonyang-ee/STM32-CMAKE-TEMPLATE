@@ -66,3 +66,10 @@ jobs:
         with:
           name: BINARY.bin
           path: ${{ github.workspace }}/build/*.bin
+
+  pr-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: PR Check
+      if: ${{ failure() }}
+      run: exit 1
