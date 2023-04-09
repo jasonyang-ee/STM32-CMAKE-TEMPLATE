@@ -2,27 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Cortex Debug",
+            "name": "ST-Link",
             "cwd": "${workspaceFolder}",
             "executable": "${command:cmake.launchTargetPath}",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "stlink",
-            "device": "STM32L432KC",            	//MCU used
-            "interface": "swd",                 	//Interface setup
-            "serialNumber": "",                 	//Set ST-Link ID if you use multiple at the same time
-            "runToEntryPoint": "main",          	//Run to main and stop there
-            "svdFile": "STM32_svd/STM32L4x2.svd",	//SVD file to see registers
-            "v1": false,
-            "showDevDebugOutput": "both"
-
-			// Will get automatically detected if STM32CubeIDE is installed to default directory or it can be manually provided if necessary..
-            // "serverpath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221\\tools\\bin\\ST-LINK_gdbserver.exe",
-            // "armToolchainPath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_2.0.0.202105311346\\tools\\bin",
-            // "stm32cubeprogrammer": "c:\\Program Files\\STMicroelectronics\\STM32Cube\\STM32CubeProgrammer\\bin",
-
-            // If you use external loader, add additional arguments
-            // "serverArgs": ["--extload", "path/to/ext/loader.stldr"],
+            "interface": "swd",
+            "showDevDebugOutput": "both",
+            "v1": false,                            // ST-Link version
+            "device": "STM32L432KC",                // MCU used [optional]
+            "serialNumber": "",                     // Set ST-Link ID if you use multiple at the same time [optional]
+            "runToEntryPoint": "main",              // Run to main and stop there [optional]
+            "svdFile": "STM32_svd/STM32L4x2.svd"    // SVD file to see registers [optional]
         }
     ]
 }
