@@ -31,7 +31,7 @@ jobs:
   alpine-build:
     runs-on: ubuntu-latest
     container:
-      image: "ghcr.io/jasonyang-ee/stm32-builder:Alpine-latest"
+      image: "ghcr.io/jasonyang-ee/stm32-builder:alpine-latest"
     steps:
       - uses: actions/checkout@v3
       - name: BUILD
@@ -40,7 +40,7 @@ jobs:
   arch-build:
     runs-on: ubuntu-latest
     container:
-      image: "ghcr.io/jasonyang-ee/stm32-builder:Arch-latest"
+      image: "ghcr.io/jasonyang-ee/stm32-builder:arch-latest"
     steps:
       - uses: actions/checkout@v3
       - name: BUILD
@@ -49,7 +49,7 @@ jobs:
   ubuntu-build-upload:
     runs-on: ubuntu-latest
     container:
-      image: "ghcr.io/jasonyang-ee/stm32-builder:Ubuntu-latest"
+      image: "ghcr.io/jasonyang-ee/stm32-builder:ubuntu-latest"
     steps:
       - uses: actions/checkout@v3
       - name: BUILD
