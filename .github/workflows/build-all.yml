@@ -1,8 +1,17 @@
 name: "Build Binary"
+
 on:
   push:
     branches:
       - "*"
+      - "!main"
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
 
 jobs:
   github-build:
@@ -67,16 +76,18 @@ jobs:
           name: BINARY.bin
           path: ${{ github.workspace }}/build/*.bin
 
-  pr-check:
-    if: ${{ always() }}
+  Result:
+    runs-on: ubuntu-22.04
     needs:
       - github-build
       - arch-build
       - alpine-build
       - ubuntu-build-upload
-    runs-on: ubuntu-latest
+    if: always() && needs.Skip_Checking.outputs.should_skip != 'true'
     steps:
-    - name: Decide whether the needed jobs succeeded or failed
-      uses: re-actors/alls-green@release/v1
-      with:
-        jobs: ${{ toJSON(needs) }}
+      - name: All Tests Ok
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
+      - name: Some Tests Failed
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
