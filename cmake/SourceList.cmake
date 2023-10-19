@@ -1,5 +1,4 @@
 set(source_list ${source_list}
-${PROJ_PATH}/Application/Src/LED.cpp
 ${PROJ_PATH}/Application/Src/main.cpp
 ${PROJ_PATH}/Core/Src/gpio.c
 ${PROJ_PATH}/Core/Src/stm32l4xx_hal_msp.c
