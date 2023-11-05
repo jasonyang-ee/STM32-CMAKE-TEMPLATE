@@ -3,28 +3,27 @@
 
 ### Table of Content:
 - [VS Code to Build and Debug STM32 Using CMake](#vs-code-to-build-and-debug-stm32-using-cmake)
-  - [Toolchain](#toolchain)
-    - [Essential Toolchain:](#essential-toolchain)
-    - [Test Your Toolchain Installation:](#test-your-toolchain-installation)
-  - [VS Code Extensions](#vs-code-extensions)
-    - [Required Extension:](#required-extension)
-    - [Comprehensive Extension List](#comprehensive-extension-list)
-  - [CMake Configuration](#cmake-configuration)
-    - [Prepare CMakeList.txt file](#prepare-cmakelisttxt-file)
-    - [Prepare Toolchain file](#prepare-toolchain-file)
-    - [Prepare MCU sepecific file](#prepare-mcu-sepecific-file)
-    - [Prepare Source List and Include List file](#prepare-source-list-and-include-list-file)
-    - [Prepare CMakePresets.json file](#prepare-cmakepresetsjson-file)
-  - [Configure VS Code to be Ready for CMake](#configure-vs-code-to-be-ready-for-cmake)
-  - [Build Project](#build-project)
+	- [Toolchain](#toolchain)
+		- [Essential Toolchain:](#essential-toolchain)
+		- [Test Your Toolchain Installation:](#test-your-toolchain-installation)
+	- [VS Code Extensions](#vs-code-extensions)
+		- [Required Extension:](#required-extension)
+		- [Comprehensive Extension List](#comprehensive-extension-list)
+	- [CMake Configuration](#cmake-configuration)
+		- [Prepare CMakeList.txt file](#prepare-cmakelisttxt-file)
+		- [Prepare Toolchain file](#prepare-toolchain-file)
+		- [Prepare MCU sepecific file](#prepare-mcu-sepecific-file)
+		- [Prepare Source List and Include List file](#prepare-source-list-and-include-list-file)
+		- [Prepare CMakePresets.json file](#prepare-cmakepresetsjson-file)
+	- [Configure VS Code to be Ready for CMake](#configure-vs-code-to-be-ready-for-cmake)
+	- [Build Project](#build-project)
 - [Debug Project](#debug-project)
-  - [Monitor Register Using SVG (System View Description) File](#monitor-register-using-svg-system-view-description-file)
+	- [Monitor Register Using SVG (System View Description) File](#monitor-register-using-svg-system-view-description-file)
 - [Flash to Target](#flash-to-target)
-  - [Setting of .gitignore](#setting-of-gitignore)
+	- [Setting of .gitignore](#setting-of-gitignore)
 - [Docker Container for STM32 CMake \& Ninja Compiling](#docker-container-for-stm32-cmake--ninja-compiling)
-    - [Dockerfile Details: https://github.com/jasonyang-ee/STM32-Dockerfile.git](#dockerfile-details-httpsgithubcomjasonyang-eestm32-dockerfilegit)
-    - [Docker Image](#docker-image)
-- [Github Badge](#github-badge)
+		- [Dockerfile Details: https://github.com/jasonyang-ee/STM32-Dockerfile.git](#dockerfile-details-httpsgithubcomjasonyang-eestm32-dockerfilegit)
+		- [Docker Image](#docker-image)
 
 
 
@@ -604,7 +603,7 @@ CubeMX/*
 
 This docker image auto clone an online git repo and compile the CMake & Ninja supported STM32 project locally on your computer with mounted volume.
 ```bash
-docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32-builder:Ubuntu-latest {Git_Repo_URL}
+docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32-builder:ubuntu-latest {Git_Repo_URL}
 ```
 
 ![Run](doc/img/run_time.gif)
@@ -613,55 +612,14 @@ docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32-builder:Ubuntu-lates
 
 
 Public Registry:
-> ghcr.io/jasonyang-ee/stm32-builder:Ubuntu-latest
+> ghcr.io/jasonyang-ee/stm32-builder:ubuntu-latest
 
-> ghcr.io/jasonyang-ee/stm32-builder:Alpine-latest
+> ghcr.io/jasonyang-ee/stm32-builder:alpine-latest
 
-> ghcr.io/jasonyang-ee/stm32-builder:Arch-latest
+> ghcr.io/jasonyang-ee/stm32-builder:arch-latest
 
-> jasonyangee/stm32-builder:Ubuntu-latest
+> jasonyangee/stm32-builder:ubuntu-latest
 
-> jasonyangee/stm32-builder:Alpine-latest
+> jasonyangee/stm32-builder:alpine-latest
 
-> jasonyangee/stm32-builder:Arch-latest
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Github Badge
-
-It is a good practice to include build result badge in application repo.
-
-1. Nevigate to the action page, select the build workflow, and click create status badge:
-
-![badge](/doc/img/badge.png)
-
-2. Copy the badge markdown string:
-
-![badge](/doc/img/badgeMD.png)
-
-3. Paste it to the top of your application README.md file to show build result
-
-![badge](/doc/img/badgeResult.png)
-
-
+> jasonyangee/stm32-builder:arch-latest
