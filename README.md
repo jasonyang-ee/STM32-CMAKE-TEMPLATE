@@ -175,12 +175,12 @@ set(CMAKE_C_EXTENSIONS              ON)
 set(CMAKE_CXX_STANDARD              17)
 set(CMAKE_CXX_STANDARD_REQUIRED     ON)
 set(CMAKE_CXX_EXTENSIONS            ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS	ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS   ON)
 # Define current path for shorter reference below
 set(PROJ_PATH                       ${CMAKE_CURRENT_SOURCE_DIR})
 # Define .cmake module for toolchain compile flags that does holds true for all ARM projects
 # This path is defined in the list() function above
-set(CMAKE_TOOLCHAIN_FILE			gcc-arm-none-eabi)
+set(CMAKE_TOOLCHAIN_FILE            gcc-arm-none-eabi)
 
 
 # Project Name    --- MUST EDIT ---
