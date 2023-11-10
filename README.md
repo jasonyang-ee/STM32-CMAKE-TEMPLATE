@@ -22,9 +22,6 @@
 - [Flash to Target](#flash-to-target)
 	- [Setting of .gitignore](#setting-of-gitignore)
 - [Docker Container for STM32 CMake \& Ninja Compiling](#docker-container-for-stm32-cmake--ninja-compiling)
-		- [Dockerfile Details: https://github.com/jasonyang-ee/STM32-Dockerfile.git](#dockerfile-details-httpsgithubcomjasonyang-eestm32-dockerfilegit)
-		- [Docker Image](#docker-image)
-
 
 
 
@@ -608,8 +605,8 @@ docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32-builder:ubuntu-lates
 
 ![Run](doc/img/run_time.gif)
 
-### Docker Image
 
+### Docker Image
 
 Public Registry:
 > ghcr.io/jasonyang-ee/stm32-builder:ubuntu-latest
