@@ -25,13 +25,13 @@
 
 
 
-# VS Code to Build and Debug STM32 Using CMake
+# STM32 CMake Template
+
+A CMake template repo to allow quick porting to start a new STM32 project.
+
+This instruction will be focusing on Windows environment setup with using VS Code.
 
 Project using STM32L432KC as example. Test hardware is NUCLEO-L432KC.
-
-Credit to: https://github.com/MaJerle/stm32-cube-cmake-vscode
-
-This instruction will be focusing on Windows environment setup.
 
 
 ## Toolchain
@@ -42,7 +42,7 @@ This instruction will be focusing on Windows environment setup.
 
 - ST Link tools are obtained by installing STM32CCubeIDE. Then, you will be able to find it in the installaiton folder.
 
-![path](doc/img/path.png)
+![path](docs_src/page/img/path.png)
 
 ### Essential Toolchain:
 
@@ -306,8 +306,8 @@ set(compiler_define ${compiler_define}
 ```
 
 > **To get ARM type from STM32CubeIDE:**
-![ARM Type](doc/img/ARM_type.png)
-![ARM Type2](doc/img/ARM_type2.png)
+![ARM Type](docs_src/page/img/ARM_type.png)
+![ARM Type2](docs_src/page/img/ARM_type2.png)
 
 > **General rule for settings would be as per table below:**
 
@@ -448,7 +448,7 @@ Simply delete the entire `/build` folder and build project again as described be
 
 - Select `Build` to compile.
 
-![build](doc/img/build.png)
+![build](docs_src/page/img/build.png)
 
 
 
@@ -495,7 +495,7 @@ This is using VS Code `Tasks` feature and Extention `cortex-debug`
 
 - Open debug tab. And our named debug preset `ST-Link` should be available to run `Green Icon` or `F5`.
 
-![debug](doc/img/debug.png)
+![debug](docs_src/page/img/debug.png)
 
 
 
@@ -510,7 +510,7 @@ This is using VS Code `Tasks` feature and Extention `cortex-debug`
 
 - Place SVG file within project root and specify path in `launch.json`.
 
-![svg](doc/img/svg.png)
+![svg](docs_src/page/img/svg.png)
 
 
 
@@ -559,7 +559,7 @@ Setting keyboard short cut `Ctrl + T` for this is going to help you very much.
   ]
 }
 ```
-![task shortcut](doc/img/task.png)
+![task shortcut](docs_src/page/img/task.png)
 
 More task setting can be found in this project folder `.vscode/` for device reset, Linux flash, and cmake build.
 
@@ -600,10 +600,10 @@ CubeMX/*
 
 This docker image auto clone an online git repo and compile the CMake & Ninja supported STM32 project locally on your computer with mounted volume.
 ```bash
-docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32-builder:ubuntu-latest {Git_Repo_URL}
+docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32-builder:ubuntu-latest -r {Git_Repo_URL}
 ```
 
-![Run](doc/img/run_time.gif)
+![Run](docs_src/page/img/run_time.gif)
 
 
 ### Docker Image

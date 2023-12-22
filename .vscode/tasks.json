@@ -95,9 +95,33 @@
 				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": []
+		},
+		{
+			"type": "shell",
+			"label": "Build Book",
+			"command": "mdbook",
+			"args": [
+				"build",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+		},
+		{
+			"type": "shell",
+			"label": "Serve Book",
+			"command": "mdbook",
+			"args": [
+				"serve",
+				"--open",
+				"--port",
+				"8000"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
 		}
-
-
-		
 	]
 }

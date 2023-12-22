@@ -1,0 +1,14 @@
+[book]
+title = "STM32 CMake Template Documentation"
+authors = ["Jason Yang"]
+language = "en"
+multilingual = false
+src = "docs_src/page"
+
+[build]
+build-dir = "docs"
+
+[output.html]
+additional-css = ["docs_src/ferris.css", "docs_src/theme/2018-edition.css"]
+additional-js = ["docs_src/ferris.js"]
+git-repository-url = "https://github.com/jasonyang-ee/STM32-Dockerfile"
