@@ -1,10 +1,11 @@
-name: "Build Binary"
+name: "Build Test"
 
 on:
   push:
     branches:
       - "*"
       - "!main"
+      - "!book"
     paths-ignore:
       - '**.md'
   pull_request:
