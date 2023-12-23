@@ -1,150 +1,53 @@
-[![Build Binary](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build-all.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build-all.yml)
+[![Build Test](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build.yml)
+[![Deploy Docs](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/mdbook.yml/badge.svg)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/mdbook.yml)
 
 
-### Table of Content:
-- [VS Code to Build and Debug STM32 Using CMake](#vs-code-to-build-and-debug-stm32-using-cmake)
-	- [Toolchain](#toolchain)
-		- [Essential Toolchain:](#essential-toolchain)
-		- [Test Your Toolchain Installation:](#test-your-toolchain-installation)
-	- [VS Code Extensions](#vs-code-extensions)
-		- [Required Extension:](#required-extension)
-		- [Comprehensive Extension List](#comprehensive-extension-list)
-	- [CMake Configuration](#cmake-configuration)
-		- [Prepare CMakeList.txt file](#prepare-cmakelisttxt-file)
-		- [Prepare Toolchain file](#prepare-toolchain-file)
-		- [Prepare MCU sepecific file](#prepare-mcu-sepecific-file)
-		- [Prepare Source List and Include List file](#prepare-source-list-and-include-list-file)
-		- [Prepare CMakePresets.json file](#prepare-cmakepresetsjson-file)
-	- [Configure VS Code to be Ready for CMake](#configure-vs-code-to-be-ready-for-cmake)
-	- [Build Project](#build-project)
-- [Debug Project](#debug-project)
-	- [Monitor Register Using SVG (System View Description) File](#monitor-register-using-svg-system-view-description-file)
-- [Flash to Target](#flash-to-target)
-	- [Setting of .gitignore](#setting-of-gitignore)
-- [Docker Container for STM32 CMake \& Ninja Compiling](#docker-container-for-stm32-cmake--ninja-compiling)
+# STM32 CMake Template
 
+A CMake template repo to allow quick porting to start a new STM32 project.
 
-
-# VS Code to Build and Debug STM32 Using CMake
+This instruction will be focusing on Windows environment setup with using VS Code.
 
 Project using STM32L432KC as example. Test hardware is NUCLEO-L432KC.
 
-Credit to: https://github.com/MaJerle/stm32-cube-cmake-vscode
+## Documentation
 
-This instruction will be focusing on Windows environment setup.
+### Visit [Documentation](https://doc.jasony.org/STM32-CMAKE-TEMPLATE/) for more information.
 
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+# Simplified Instruction
 
 ## Toolchain
 
-- Download and prepare binary of each toolchain files in a centralized folder.
-
-- Edit environment varialbe PATH to include those folder or it's `/bin` folder.
-
-- ST Link tools are obtained by installing STM32CCubeIDE. Then, you will be able to find it in the installaiton folder.
-
-![path](doc/img/path.png)
-
-### Essential Toolchain:
-
-1. [ARM GNU](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
-
-2. [CMake](https://cmake.org/download/)
-
-3. [Ninja](https://github.com/ninja-build/ninja/releases)
-
-4. ST Link GDB Server (From CubeIDE Installation).
-
-   Example Location:
-
-   `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221`
-
-5. STM32_Programmer_CLI (From CubeIDE Installation)
-   
-   Example Location:
-   
-   `C:\ST\STM32CubeIDE_$YOUR_VERSION_NUMBER$\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.cubeprogrammer.win32_2.0.100.202110141430`
+- [ARM GNU](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
+- [CMake](https://cmake.org/download/)
+- [Ninja](https://github.com/ninja-build/ninja/releases)
+- ST Link GDB Server (Copy from CubeIDE Installation).
+- STM32_Programmer_CLI (Copy from CubeIDE Installation)
 
 
-6. _Side Note: ST Link for Linux https://github.com/stlink-org/stlink_
-
-
-### Test Your Toolchain Installation:
-
-Run below commands in CMD to check toolchain installation.
-```
-arm-none-eabi-gcc --version
-STM32_Programmer_CLI --version
-ST-LINK_gdbserver --version
-cmake --version
-ninja --version
-```
-
-
-
-
-
-
-
-
+&nbsp;
 
 
 ## VS Code Extensions
 
-With the above toolchain and ST Link, you will be able to build and flash program into STM32 with command line. But, there's no sane person will do that everytime. Using VS Code Extension will simplify your `build` - `flash` - `debug` process.
-
-### Required Extension:
-
-```
-CMake
-CMake Tools
-Cortex-Debug
-Memory View
-RTOS Views
-```
-
-> Install with command: `` Ctrl + Shift + ` `` to open terminal, then paste (Shift + Ins) those commands.
-> ```shell
-> code --install-extension twxs.cmake
-> code --install-extension ms-vscode.cmake-tools
-> code --install-extension marus25.cortex-debug
-> code --install-extension mcu-debug.debug-tracker-vscode
-> code --install-extension mcu-debug.memory-view
-> code --install-extension mcu-debug.rtos-views
-> ```
+- CMake
+- CMake Tools
+- Cortex-Debug
+- Memory View
+- RTOS Views
 
 
-### Comprehensive Extension List
-
-You can find a full list of my recommeded extensions in the `/.vscode/extensions.json` file.
+&nbsp;
 
 
 
-
-
-
-
-
-## CMake Configuration
-
-Every CMake-based application requires root `CMakeLists.txt` file *in the root directory*, that describes the project and provides input information for build system generation.
-
-Essential things described in `CMakeLists.txt` file:
-
-- Toolchain and compiler information
-- Project name
-- Source files to build with compiler, C, C++ or Assembly files
-- List of include paths for compiler to find functions, defines, ... (`-I`)
-- MCU sepecific compiler flags
-- Linker script path
-- Compilation defines, or sometimes called *preprocessor defines* (`-D`)
-
-
-
-
-
-
-
-### Prepare CMakeList.txt file
+## CMakeList.txt file
 
 This is the main CMake setup file.
 
@@ -246,11 +149,12 @@ add_custom_command(TARGET ${EXECUTABLE} POST_BUILD
 
 
 
+&nbsp;
 
 
 
 
-### Prepare Toolchain file
+## Toolchain file
 
 CMake needs to be aware about toolchain we would like to use to finally compile the project with. This file will be universal across projects.
 
@@ -284,10 +188,12 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 
 
+&nbsp;
 
 
 
-### Prepare MCU sepecific file
+
+## MCU sepecific file
 
 Each MCU has their own ARM compiler flags. Those are defined in a individual module for portability.
 
@@ -304,10 +210,6 @@ set(compiler_define ${compiler_define}
     "STM32L432xx"
 )
 ```
-
-> **To get ARM type from STM32CubeIDE:**
-![ARM Type](doc/img/ARM_type.png)
-![ARM Type2](doc/img/ARM_type2.png)
 
 > **General rule for settings would be as per table below:**
 
@@ -336,32 +238,24 @@ set(compiler_define ${compiler_define}
 
 
 
+&nbsp;
 
 
 
 
 
+## Source List and Include List file
+
+Project source and include list are required for CMake to build the project in `/cmake` folder.
+
+The format of the list must be full path.
+
+
+&nbsp;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Prepare Source List and Include List file
+## Auto Scan Source and Include List
 
 Auto scan bash script has been made for STM32CubeMX generated files structure
 
@@ -376,12 +270,13 @@ Auto scan bash script has been made for STM32CubeMX generated files structure
 
 
 
+&nbsp;
 
 
 
 
 
-### Prepare CMakePresets.json file
+## CMakePresets.json file
 
 `CMakePresets.json` provides definition for user configuration. Having this file allows developer to quickly change between debug and release mode.
 
@@ -434,38 +329,21 @@ Auto scan bash script has been made for STM32CubeMX generated files structure
 ```
 
 
-
-## Configure VS Code to be Ready for CMake
-
-While constructing your CMakeList.txt file, the extension will try to actively read the setting change and update the cache in /build folder, and this sometime will be messed up after mutiple iteration of trials.
-
-Simply delete the entire `/build` folder and build project again as described below.
-
-
-## Build Project
-
-- Select configuration at bottom left. For example: `[DEBUG]`.
-
-- Select `Build` to compile.
-
-![build](doc/img/build.png)
+&nbsp;
 
 
 
 
 
-
-
-
-
-
-
-# Debug Project 
+## Debug Project 
 
 This is using VS Code `Tasks` feature and Extention `cortex-debug`
 
 - Create `.vscode/launch.json`
 
+- Open debug tab. And our named debug preset `ST-Link` should be available to run `Green Icon` or `F5`.
+
+> launch.json
 ```json
 {
   "version": "0.2.0",
@@ -493,48 +371,23 @@ This is using VS Code `Tasks` feature and Extention `cortex-debug`
 }
 ```
 
-- Open debug tab. And our named debug preset `ST-Link` should be available to run `Green Icon` or `F5`.
-
-![debug](doc/img/debug.png)
 
 
+&nbsp;
 
 
 
 
 
-
-## Monitor Register Using SVG (System View Description) File
-
-- Download SVG file from [ST website/STM32XXXX/CAD Resources](https://www.st.com/en/microcontrollers-microprocessors/stm32l432kc.html#cad-resources)
-
-- Place SVG file within project root and specify path in `launch.json`.
-
-![svg](doc/img/svg.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Flash to Target
+## Flash to Target
 
 We are using VS Code Task `Ctrl + Shift + P` -> Enter `Tasks: run task`. This will allow auto excution of custom terminal commands.
 
 Setting keyboard short cut `Ctrl + T` for this is going to help you very much.
 
-- Create file `.vscode/tasks.json`
+The configuration can be defined by creating file `.vscode/tasks.json`
 
+> tasks.json
 ```json
 {
   "version": "2.0.0",
@@ -559,40 +412,14 @@ Setting keyboard short cut `Ctrl + T` for this is going to help you very much.
   ]
 }
 ```
-![task shortcut](doc/img/task.png)
-
-More task setting can be found in this project folder `.vscode/` for device reset, Linux flash, and cmake build.
-
-
-## Setting of .gitignore
-
-To avoid bloating the repository, please do not push build file. To have stable building process, docker with Github action is desired.
-
-- Create file `.gitignore` in root folder.
-
-> .gitignore rule:
-```
-build/
-```
-
-Optionally, you may still keep STM32CubeMX project for Pin Map management and code generation
-
-Best practice is to track only `.ioc` file in CubeMX folder.
-
-> .gitignore rule:
-```
-CubeMX/*
-!CubeMX/*.ioc
-```
 
 
 
+&nbsp;
 
 
 
-
-
-# Docker Container for STM32 CMake & Ninja Compiling
+## Docker Container for STM32 CMake & Ninja Compiling
 
 ### Dockerfile Details: https://github.com/jasonyang-ee/STM32-Dockerfile.git
 
@@ -600,10 +427,10 @@ CubeMX/*
 
 This docker image auto clone an online git repo and compile the CMake & Ninja supported STM32 project locally on your computer with mounted volume.
 ```bash
-docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32-builder:ubuntu-latest {Git_Repo_URL}
+docker run -v "{Local_Full_Path}":"/home" jasonyangee/stm32-builder:ubuntu-latest -r {Git_Repo_URL}
 ```
 
-![Run](doc/img/run_time.gif)
+![Run](docs_src/page/img/run_time.gif)
 
 
 ### Docker Image
