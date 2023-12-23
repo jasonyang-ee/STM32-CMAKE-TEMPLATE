@@ -59,6 +59,8 @@ This is the main CMake setup file.
   
 - Otherwise, you will have to modify `/camke/IncludeList.cmake` and `/cmake/IncludeList.cmake`.
 
+> CMakeList.txt
+
 ```makefile
 # Define needed CMake verion
 cmake_minimum_required(VERSION 3.22)
@@ -161,6 +163,8 @@ CMake needs to be aware about toolchain we would like to use to finally compile 
 - Make new folder in project root: `cmake`
 - Make new file in folder /cmake: `./cmake/gcc-arm-none-eabi.cmake`
 
+> gcc-arm-none-eabi.cmake
+
 ```makefile
 set(CMAKE_SYSTEM_NAME               Generic)
 set(CMAKE_SYSTEM_PROCESSOR          arm)
@@ -196,6 +200,8 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 ## MCU sepecific file
 
 Each MCU has their own ARM compiler flags. Those are defined in a individual module for portability.
+
+> STM32L432xx_HAL_PARA.cmake
 
 ```makefile
 set(CPU_PARAMETERS ${CPU_PARAMETERS}
@@ -282,6 +288,8 @@ Auto scan bash script has been made for STM32CubeMX generated files structure
 
 - Create file `CMakePresets.json` in Project Root
 
+> CMakePresets.json
+
 ```json
 {
   "version": 3,
@@ -344,6 +352,7 @@ This is using VS Code `Tasks` feature and Extention `cortex-debug`
 - Open debug tab. And our named debug preset `ST-Link` should be available to run `Green Icon` or `F5`.
 
 > launch.json
+
 ```json
 {
   "version": "0.2.0",
@@ -388,6 +397,7 @@ Setting keyboard short cut `Ctrl + T` for this is going to help you very much.
 The configuration can be defined by creating file `.vscode/tasks.json`
 
 > tasks.json
+
 ```json
 {
   "version": "2.0.0",
