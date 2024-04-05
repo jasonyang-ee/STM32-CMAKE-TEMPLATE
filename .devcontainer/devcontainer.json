@@ -1,6 +1,6 @@
 {
 	"name": "STM32",
-	"image": "ghcr.io/jasonyang-ee/stm32-builder:Ubuntu-latest",
+	"image": "ghcr.io/jasonyang-ee/stm32-builder:ubuntu-latest",
 	"privileged": true,
 	"customizations": {
 		"vscode": {
