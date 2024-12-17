@@ -65,13 +65,13 @@ jobs:
         run: build.sh
 
       - name: Upload Binary .elf
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: BINARY.elf
           path: ${{ github.workspace }}/build/*.elf
 
       - name: Upload Binary .bin
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: BINARY.bin
           path: ${{ github.workspace }}/build/*.bin
