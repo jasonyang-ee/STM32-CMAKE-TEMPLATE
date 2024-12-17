@@ -1,4 +1,4 @@
-[![Build Test](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build.yml)
+[![Build Test](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build.yml/badge.svg)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/build.yml)
 [![Deploy Docs](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/mdbook.yml/badge.svg)](https://github.com/jasonyang-ee/STM32-CMAKE-TEMPLATE/actions/workflows/mdbook.yml)
 
 
